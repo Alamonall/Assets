@@ -23,7 +23,7 @@ public class Characters : MonoBehaviour {
 	public bool Defend;
 	public int ActionPoint;
 	IJudje[] Turn;
-	public static Characters(){
+	public Characters(){
 		Turn = new IJudje[6];
 		IJudje noCharachter = new noCharachter();
 		for(int i = 0; i < 6; i++){

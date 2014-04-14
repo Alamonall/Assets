@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using System.Collections;
 
-public class noCharachter : Characters, IJudje{
+public class noCharachter : IJudje{
 	public noCharachter(){}
 	public void Display(){}
 		

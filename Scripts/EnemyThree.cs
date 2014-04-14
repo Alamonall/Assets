@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class EnemyThree : Characters, IJudje {
+public class EnemyThree : IJudje {
 	void Start(){
 		MaxHealt = 100;
 		MaxMana = 200;

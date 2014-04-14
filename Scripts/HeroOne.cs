@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class HeroOne :  Characters , IJudje{
+public class HeroOne :  IJudje{
 	public HeroOne(){
 		MaxHealt = 100;
 		MaxMana = 200;

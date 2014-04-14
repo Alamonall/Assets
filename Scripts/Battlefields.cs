@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class Batlefields : MonoBehaviour {
+public class Battlefields : MonoBehaviour {
 	Object WarriorTexture;
 	Object ArcherTexture;
 	Object MageTexture;
@@ -24,18 +24,64 @@ public class Batlefields : MonoBehaviour {
 		En2 = Resources.Load("Green");
 		En3 = Resources.Load("Red");
 		Field = new int[n,m];
+		Marking();
+	}
+	void NextMove(){
+
+
+	]
+	void Marking(){
 		int c = 15;
-		for(int i = 0; i <= n; i++){
-			for(int j = 0; j <= m; j++){
-				Debug.Log("i = " + i + ", j = " + j);
-				Instantiate(ActCell, new Vector3(i*15 + c, (j + 1) * 15),Quaternion.identity);
-				Field[i,j] = 0;
+		for(int i = 0; i < n; i++){
+			for(int j = 0; j < m; j++){
+			//	Debug.Log("i = " + i + "j = " + j);
+				if(j == 1){
+					if(i == 0){
+						Instantiate(En1, new Vector3(j * 15 + c, (i + 1) * 15, -10),Quaternion.identity);
+						Field[i,j] = 2;
+					}
+					if(i == 2){
+						Instantiate(En2, new Vector3(j * 15 + c, (i + 1) * 15, -10),Quaternion.identity);
+						Field[i,j] = 2;
+					}
+					if(i == 4){
+						Instantiate(En3, new Vector3(j * 15 + c, (i + 1) * 15, -10),Quaternion.identity);
+						Field[i,j] = 2;
+					}
+				}
+				if(j == 14){
+					if(i == 0){
+						Instantiate(WarriorTexture, new Vector3( j * 15 + c, (i + 1) * 30, -10),Quaternion.identity);
+						Field[i,j] = 3;
+					}
+					if(i == 2){
+						Instantiate(ArcherTexture, new Vector3(j * 15 + (c + 2), i * 30, -10),Quaternion.identity);
+						Field[i,j] = 3;
+					}
+					if(i == 3){
+						Instantiate(MageTexture, new Vector3(j * 15 + (c + 3), i * 30, -10),Quaternion.identity);
+						Field[i,j] = 3;
+					}
+				}
+				Instantiate(ActCell, new Vector3(j*15 + c, (i + 1) * 15),Quaternion.identity);
+				if(Field[i,j] != 1 || Field[i,j] != 2 || Field[i,j] != 3){
+					Field[i,j] = 0;
+				}
 			}
-			c=c+14;
+			c=c+4;
 		}
-		Charachters charS = new Charachters();
-        	charS.add(0, new HeroOne());
-        	charS.execute(0);
+
+	}
+	void Step(){
+		int c = 15;
+		for(int i = 0; i < n; i++){
+			for(int j = 0; j < m; j++){
+				if(Field[i,j] == 1)
+					Instantiate(PosCell, new Vector3(j*15 + c, (i + 1) * 15),Quaternion.identity);
+			}
+			c=c+4;
+		}
+			
 	}
 	void move(int x1, int x2, int step){
 		if(step > 0){
@@ -57,9 +103,9 @@ public class Batlefields : MonoBehaviour {
 		else{
 			if(Field[x1,x2] == 0){
 				Field[x1,x2] = 1;
+
 			}
 		}
-		
 	}
-
 }
+

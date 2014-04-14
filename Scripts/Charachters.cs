@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Characters : MonoBehaviour {
+public class Charachters : MonoBehaviour {
 	public int Health;
 	public int MaxHealt;
 	public int Mana;
@@ -23,15 +23,17 @@ public class Characters : MonoBehaviour {
 	public bool Defend;
 	public int ActionPoint;
 	IJudje[] Turn;
-	public Characters(){
+	public Charachters(){
 		Turn = new IJudje[6];
-		IJudje noCharachter = new noCharachter();
+		IJudje noChar = new noCharachter();
 		for(int i = 0; i < 6; i++){
-			Turn[i] = noCharachter;
+			Turn[i] = noChar;
 		}
 	}
 	public void add(int slot, IJudje character){
 		Turn[slot] = character;
 	}
-
+	public void Display(int slot){
+		Turn[slot].Display();
+	}
 }

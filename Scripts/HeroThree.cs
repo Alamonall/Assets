@@ -1,8 +1,8 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
-public class HeroThree : Characters, IJudje {
+public class HeroThree : IJudje {
 	public void Display(){
-		Debug.Log(" My Name = "  + Name);
+		Debug.Log(" My Name = "  );
 	}
 }

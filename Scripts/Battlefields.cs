@@ -33,6 +33,9 @@ public class Batlefields : MonoBehaviour {
 			}
 			c=c+14;
 		}
+		Charachters charS = new Charachters();
+        	charS.add(0, new HeroOne());
+        	charS.execute(0);
 	}
 	void move(int x1, int x2, int step){
 		if(step > 0){

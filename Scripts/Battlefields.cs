@@ -18,10 +18,11 @@ public class Battlefields : MonoBehaviour {
 	public int Heroes; // кол-во героев на поле
 	public GameObject WhoMakeStepNow; // Кто делает ход в данный момент
 	bool EndOfStep; // Если true - значит ход сделан
-
+	GameObject ObjToDestroy;
 	void Start(){
 		HeightField = 5;
 		WidthField = 15;
+		EndOfStep = false;
 		WarriorTexture = Resources.Load("HeroOne");
 		ArcherTexture = Resources.Load("HeroTwo");
 		MageTexture = Resources.Load("HeroThree");
@@ -49,15 +50,22 @@ public class Battlefields : MonoBehaviour {
 	
 	void Steps(){
 			if(Enemys != 0 || Heroes != 0){
-				i= i% (Enemys+Heroes);				
+				i= i% (Enemys+Heroes);	
 				WhoMakeStepNow = GameObject.Find(Turn[i].Type);
 				int y_chars = Mathf.CeilToInt(WhoMakeStepNow.transform.position.x/15);
 				int x_chars = Mathf.CeilToInt(WhoMakeStepNow.transform.position.y/15);
 				move(x_chars, y_chars, Turn[i].ActionPoint);
-				PrintMy("move");
 				RenderPosCeil();
+				if(EndOfStep){
+			              ClearAllCeils();
+						  PrintMy("Clear");
+			              i++;
+						  EndOfStep = false;
+			              Steps();
+				}
 			}
 	}
+
 	//Отрисовка персонажей
 	void RenderChars(){
 		for(int i = 0; i < HeightField; i++){
@@ -131,23 +139,33 @@ public class Battlefields : MonoBehaviour {
 	}
 
 	//Подсчет возможных ходов для персонажа, x и y_char координаты персонажа в массиве поля
+	// HeightField = 5, WidthField = 15
 	void move(int x_char, int y_char, int step){
-		if(step > 0){
-			Debug.Log("1");
-			if(x_char > 0 && y_char > 0 && x_char < HeightField && y_char < WidthField){
-				Debug.Log("2");
+		if(step >= 0){
+			//Debug.Log("1 x = " + x_char + " y = " + y_char);
+			if(x_char > 1 && y_char >= 0){
 				move(x_char - 1, y_char, step - 1);
+			}
+			if(x_char >= 0 && y_char > 1){
 				move(x_char, y_char - 1, step - 1);
+			}
+			if(x_char < HeightField && y_char <= WidthField){
 				move(x_char + 1, y_char, step - 1);
+			}
+			if(x_char <= HeightField && y_char < WidthField){
 				move(x_char,y_char + 1, step - 1);
-				if(Field[x_char,y_char] == 0){
-					Debug.Log("3");
+			}
+			if(x_char > -1 && y_char > -1 && x_char < HeightField && y_char < WidthField){
+				if(Field[ x_char, y_char] == 0){
 					Field[x_char, y_char] = 1;
 				}
 			}
-			if(Field[x_char,y_char] == 0){
-				Debug.Log("4");
-				Field[x_char, y_char] = 1;
+			if(x_char > -1 && y_char > -1 && x_char < HeightField && y_char < WidthField){
+			
+				if(Field[x_char,y_char] == 0){
+					Debug.Log("4");
+					Field[x_char, y_char] = 1;
+				}
 			}
 		}
 	}
@@ -157,8 +175,18 @@ public class Battlefields : MonoBehaviour {
 			for(int j = 0; j < WidthField; j++){
 				if(Field[i,j] == 1){
 					Field[i,j] = 0;
+					ObjToDestroy = GameObject.FindWithTag("CellPos");
+					Destroy(ObjToDestroy);
 				}
 			}
+		}
+	}
+
+
+	void Update(){
+		if(Input.GetKey(KeyCode.A)){
+			Debug.Log(" Was Pressed");
+			EndOfStep = true;
 		}
 	}
 }

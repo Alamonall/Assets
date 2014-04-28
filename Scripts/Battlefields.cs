@@ -16,12 +16,15 @@ public class Battlefields : MonoBehaviour {
 	public List<Charachters> Turn;
 	public int Enemys; //кол-во врагов на поле
 	public int Heroes; // кол-во героев на поле
-	public GameObject WhoMakeStepNow; // Кто делает ход в данный момент
-	bool EndOfStep; // Если true - значит ход сделан
-	GameObject ObjToDestroy;
+	public static GameObject WhoMakeStepNow; // Кто делает ход в данный момент
+	public static bool EndOfStep; // Если true - значит ход сделан
+	public int TempActionPoints;
+	public static bool frag; // Отвечает за уничтожение this.обьектов
+
 	void Start(){
 		HeightField = 5;
 		WidthField = 15;
+		frag = false;
 		EndOfStep = false;
 		WarriorTexture = Resources.Load("HeroOne");
 		ArcherTexture = Resources.Load("HeroTwo");
@@ -32,10 +35,6 @@ public class Battlefields : MonoBehaviour {
 		En2 = Resources.Load("EnemyTwo");
 		En3 = Resources.Load("EnemyThree");
 		Field = new int[HeightField, WidthField];
-		RenderActCell();
-		PrintMy("RenderActCell");
-		RenderChars();
-		PrintMy("RenderChars");
 		Turn = new List<Charachters>();
 		Turn.Add (new HeroOne());
 		Turn.Add (new HeroTwo());
@@ -43,27 +42,41 @@ public class Battlefields : MonoBehaviour {
 		Turn.Add (new EnemyOne());
 		Turn.Add (new EnemyTwo());
 		Turn.Add (new EnemyThree());
+		RenderActCell();
+		RenderChars();
 		Steps();
-		//Step();
-
 	}
 	
 	void Steps(){
 			if(Enemys != 0 || Heroes != 0){
 				i= i% (Enemys+Heroes);	
 				WhoMakeStepNow = GameObject.Find(Turn[i].Type);
+				TempActionPoints = Turn[i].ActionPoint;
 				int y_chars = Mathf.CeilToInt(WhoMakeStepNow.transform.position.x/15);
 				int x_chars = Mathf.CeilToInt(WhoMakeStepNow.transform.position.y/15);
 				move(x_chars, y_chars, Turn[i].ActionPoint);
-				RenderPosCeil();
+				if(!EndOfStep)
+					RenderPosCeil();
 				if(EndOfStep){
-			              ClearAllCeils();
-						  PrintMy("Clear");
-			              i++;
-						  EndOfStep = false;
-			              Steps();
+						EndOfStep = false;
+						i++;
+						ClearAllCeils();
+				     	Steps();
 				}
 			}
+	}
+	//Передвижение персонажа на клетку с координатами (x, y)
+	public void MakeTransition(float x, float y){
+		int new_x = Mathf.CeilToInt(x/15);
+		int new_y = Mathf.CeilToInt(y/15);
+		int LeftActionPoints = TempActionPoints - Mathf.Abs(Mathf.CeilToInt(WhoMakeStepNow.transform.position.x/15) - new_x) + Mathf.Abs(Mathf.CeilToInt(WhoMakeStepNow.transform.position.y/15) - new_y);
+		WhoMakeStepNow.transform.position = new Vector3(x, y);
+		ClearAllCeils();
+		Debug.Log("LeftActionPoints = " + LeftActionPoints + " ");
+		frag = true;
+		move(new_x, new_y, LeftActionPoints);
+		RenderPosCeil();			                              
+
 	}
 
 	//Отрисовка персонажей
@@ -143,10 +156,10 @@ public class Battlefields : MonoBehaviour {
 	void move(int x_char, int y_char, int step){
 		if(step >= 0){
 			//Debug.Log("1 x = " + x_char + " y = " + y_char);
-			if(x_char > 1 && y_char >= 0){
+			if(x_char >= 1 && y_char >= 0){
 				move(x_char - 1, y_char, step - 1);
 			}
-			if(x_char >= 0 && y_char > 1){
+			if(x_char >= 0 && y_char >= 1){
 				move(x_char, y_char - 1, step - 1);
 			}
 			if(x_char < HeightField && y_char <= WidthField){
@@ -161,22 +174,19 @@ public class Battlefields : MonoBehaviour {
 				}
 			}
 			if(x_char > -1 && y_char > -1 && x_char < HeightField && y_char < WidthField){
-			
 				if(Field[x_char,y_char] == 0){
-					Debug.Log("4");
 					Field[x_char, y_char] = 1;
 				}
 			}
 		}
 	}
+
 	//Очистка клеток на след. ход
 	void ClearAllCeils(){
 		for(int i = 0; i < HeightField; i++){
 			for(int j = 0; j < WidthField; j++){
 				if(Field[i,j] == 1){
 					Field[i,j] = 0;
-					ObjToDestroy = GameObject.FindWithTag("CellPos");
-					Destroy(ObjToDestroy);
 				}
 			}
 		}
@@ -184,9 +194,14 @@ public class Battlefields : MonoBehaviour {
 
 
 	void Update(){
-		if(Input.GetKey(KeyCode.A)){
-			Debug.Log(" Was Pressed");
-			EndOfStep = true;
+		if(Input.GetKeyDown(KeyCode.S)){
+			if(EndOfStep){
+				EndOfStep = false;
+			}
+			else if(!EndOfStep){
+				EndOfStep = true;
+			}
+			Steps();
 		}
 	}
 }

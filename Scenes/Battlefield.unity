@@ -168,4 +168,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Enemys: 3
   Heroes: 3
-  WhoMakeStepNow: {fileID: 0}
+  TempActionPoints: 0

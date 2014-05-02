@@ -16,6 +16,7 @@ public class MainMenu : MonoBehaviour {
 	public GUIStyle InventoryMenuStyle;
 	public GUIStyle BackgroundInvJurMenuStyle;
 	public GUIStyle JournalMenuStyle;
+
 	void OnGUI () {
 		if (ActivMenu || SettingsMenu)
 						main_menu ();
@@ -34,6 +35,7 @@ public class MainMenu : MonoBehaviour {
 		if (GameMode)
 						ShowMenu ();
 	}
+
 	void ShowMenu(){
 		GUI.BeginGroup (new Rect (Screen.width / 5, 0, Screen.width / 3, Screen.height / 10),BackgroundInvJurMenuStyle);
 		if (GUI.Button (new Rect (Screen.width / 5, 0,
@@ -52,6 +54,7 @@ public class MainMenu : MonoBehaviour {
 		}
 		GUI.EndGroup ();
 	}
+
 	void ShowInventory(){
 		GameMode = false;
 		Time.timeScale = 0;

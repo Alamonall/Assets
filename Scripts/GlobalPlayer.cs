@@ -3,18 +3,21 @@ using System.Collections;
 
 public class GlobalPlayer : MonoBehaviour {
 	private Animator anim;
-	public int Speed = 5;
-	public int Ran = 0;
 	private Camera Camera;
-	private float CurX = -8;
-	private float CurY = -13;
-	private float CurZ = 1;
 	private Transform Player;
-	private string Profile = "Prof1";
-	public static bool Battle = false;
-	public string TypeOfLocation;
-	public bool DangerZone = false;
+
+	public int Speed = 5; // скорость хождения
+	public int Ran = 0;
+	private float CurX = -8; // Стартовые координаты ГГ
+	private float CurY = -13; // Стартовые координаты ГГ
+	private float CurZ = 1; // Стартовые координаты ГГ
+
+	private string Profile = "Prof1"; //Какой профиль загружен
+	public static bool Battle = false; 
+	public string TypeOfLocation; // Отвечат за то, на каком типе территории находится ГГ
+	public bool DangerZone = false; // Опасная ли зона, на которой счас ГГ
 	public float Times = 1;
+
 	void OnTriggerEnter2D(Collider2D other) {
 		if (!(other.gameObject.name == "GlobalPlayer")) {
 			TypeOfLocation = other.gameObject.name;
@@ -24,12 +27,12 @@ public class GlobalPlayer : MonoBehaviour {
 				DangerZone = false;
 		}
 	}
-	void OnTriggersExit2D(Collider2D other){
-	}
+
 	void Start(){
 			anim = GetComponent<Animator>();
 			Player = this.gameObject.transform;
 	}
+
 	void MeetTheEnemy(){
 			DangerZone = false;
 			Application.LoadLevel ("Battlefield");
@@ -39,6 +42,7 @@ public class GlobalPlayer : MonoBehaviour {
 			PlayerPrefs.SetFloat ("PosY" + Profile, CurY); 
 			PlayerPrefs.SetFloat ("PosZ" + Profile, CurZ); 
 	}
+
 	void Update(){
 		if (DangerZone) {
 						do {
@@ -74,6 +78,7 @@ public class GlobalPlayer : MonoBehaviour {
 			Player.position = PlayerPosition;
 			Battle = false;			
 		}
+
 		if (Input.GetKey (KeyCode.W) || Input.GetKey(KeyCode.UpArrow)) {
 			anim.SetBool ("MoveUp", true);
 			Player.Translate (Vector3.up * Speed * Time.deltaTime);

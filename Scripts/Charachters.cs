@@ -23,4 +23,5 @@ public class Charachters {
 	public bool Defend;
 	public int ActionPoint;
 	public string Type;
+
 }

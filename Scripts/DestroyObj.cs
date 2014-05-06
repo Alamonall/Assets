@@ -4,9 +4,11 @@ using System.Collections;
 public class DestroyObj : MonoBehaviour {
 
 	public bool ImInside;
+	public Transform ThisObj;
 
 	void Start(){
 		ImInside = false;
+		ThisObj = this.gameObject.transform;
 	}
 
 	void OnMouseEnter (){
@@ -21,7 +23,7 @@ public class DestroyObj : MonoBehaviour {
 
 	void Update () {
 		if(Input.GetMouseButton(0) && ImInside){
-			GameObject.Find("Main Camera").GetComponent<Battlefields>().MakeTransition(this.gameObject.transform.position.x, this.gameObject.transform.position.y);	
+			GameObject.Find("Main Camera").GetComponent<Battlefields>().MakeTransition(ThisObj.position.x, ThisObj.position.y);	
 		}
 	}
 }

@@ -11,8 +11,9 @@ public class Battlefields : MonoBehaviour {
 	Object En1;
 	Object En2;
 	Object En3;
-	int[,] Field;
-	int XField, YField,i; // размерность поля по вертикали ( XField) и горизонтали (YField)
+	int i;
+	public int[,] Field;
+	public int XField, YField; // размерность поля по вертикали ( XField) и горизонтали (YField)
 	public List<Charachters> Turn;
 	public int Enemys; //кол-во врагов на поле
 	public int Heroes; // кол-во героев на поле
@@ -24,6 +25,10 @@ public class Battlefields : MonoBehaviour {
 	public GUIStyle JournalMenuStyle;
 	public int x_chars; // координаты ГГ в момент хода
 	public int y_chars; // координаты ГГ в момент хода
+	public int LeftActionPoints; // отвечает за кол-во оставшихся шагов 
+	public Charachters WhoStep; // кто ходит в данные момент, переменная для боев
+	public int new_x;
+	public int new_y;
 
 	void Start(){
 		XField = 15;
@@ -55,12 +60,16 @@ public class Battlefields : MonoBehaviour {
 	}
 	
 	void Steps(){
-			if(Enemys != 0 || Heroes != 0){
+		if(Heroes > 0 && Enemys > 0){
+				Debug.Log(" Enemys = " + Enemys + " Heroes = " + Heroes);
 				int h = Enemys + Heroes;
 				i = i % h;
-				Debug.Log(" i = " + i);
+				//Debug.Log(" i = " + i);
+				while(!GameObject.Find(Turn[i].Type))
+					i++;
 				WhoMakeStepNow = GameObject.Find(Turn[i].Type);
-				if(WhoMakeStepNow.tag != "Enemys"){
+				WhoStep = Turn[i];
+				//if(WhoMakeStepNow.tag != "Enemys"){
 						TempActionPoints = Turn[i].ActionPoint;
 						x_chars = Mathf.CeilToInt(WhoMakeStepNow.transform.position.x/15);
 						y_chars = Mathf.CeilToInt(WhoMakeStepNow.transform.position.y/15);
@@ -74,29 +83,38 @@ public class Battlefields : MonoBehaviour {
 								ClearAllCeils();
 						     	Steps();
 						}
-				}
-				else{
-					i++;
-
-				}
+				//}
 			}
+		else
+			Application.LoadLevel("GlobalWorld");
 	}
 
+	public void KillCell(int i, int j){
+		Field[i,j] = 0;
+	}
 	//Передвижение персонажа на клетку с координатами (x, y)
 	public void MakeTransition(float x, float y){
-		int new_x = Mathf.CeilToInt(x/15);
-		int new_y = Mathf.CeilToInt(y/15);
+		new_x = Mathf.CeilToInt(x/15);
+		new_y = Mathf.CeilToInt(y/15);
+		int old_x = Mathf.CeilToInt(WhoMakeStepNow.transform.position.x/15);
+		int old_y = Mathf.CeilToInt(WhoMakeStepNow.transform.position.y/15);
+		Field[old_x, old_y] = 0;
 		//Debug.Log(" TempActionPoints = " + TempActionPoints + " old x = " + Mathf.Abs(Mathf.CeilToInt(WhoMakeStepNow.transform.position.x/15)) + " old y = " + Mathf.Abs(Mathf.CeilToInt(WhoMakeStepNow.transform.position.y/15)));
-		int LeftActionPoints = TempActionPoints - (Mathf.Abs(Mathf.CeilToInt(WhoMakeStepNow.transform.position.x/15) - new_x) + Mathf.Abs(Mathf.CeilToInt(WhoMakeStepNow.transform.position.y/15) - new_y));
+		LeftActionPoints = TempActionPoints - (Mathf.Abs(old_x - new_x) + Mathf.Abs(old_y - new_y));
 		//Debug.Log("LeftActionPoints = " + LeftActionPoints + "new x = " + new_x + " new y = " + new_y);
 		//Debug.Log(" NewNew x = " + Mathf.Abs(Mathf.CeilToInt(WhoMakeStepNow.transform.position.x/15) - new_x) + " NewNew y = " + Mathf.Abs(Mathf.CeilToInt(WhoMakeStepNow.transform.position.y/15) - new_y));
 		WhoMakeStepNow.transform.position = new Vector3(x, y);
 		Field[new_x, new_y] = 3;
-		Field[x_chars, y_chars] = 0;
 		ClearAllCeils();
-		move(new_x, new_y, LeftActionPoints);
-		RenderPosCeil();	
-		TempActionPoints = LeftActionPoints;
+		if(LeftActionPoints != 0){
+			move(new_x, new_y, LeftActionPoints);
+			RenderPosCeil();	
+			TempActionPoints = LeftActionPoints;
+		}
+		else{
+			i++;
+			Steps();
+		}
 	}
 
 	//Отрисовка персонажей
@@ -188,22 +206,19 @@ public class Battlefields : MonoBehaviour {
 			if(x_char <= XField && y_char < YField){
 				move(x_char,y_char + 1, step - 1);
 			}
-			if(x_char > -1 && y_char > -1 && x_char < XField && y_char < YField){
-				if(Field[x_char, y_char] == 0){
-					//Debug.Log(" i = " + x_char + " j = " + y_char);
-					Field[x_char, y_char] = 1;
-					//Debug.Log(Field[x_char,y_char]);
-					}
-				}
+//			if(x_char > -1 && y_char > -1 && x_char < XField && y_char < YField){
+//				if(Field[x_char, y_char] == 0){
+//					//Debug.Log(" i = " + x_char + " j = " + y_char);
+//					Field[x_char, y_char] = 1;
+//					//Debug.Log(Field[x_char,y_char]);
+//					}
+//				}
 			}
-		if(x_char > -1)
-			if(y_char > -1)
-				if(x_char < XField)
-					if(y_char < YField){
-						if(Field[x_char, y_char] == 0){
-							Field[x_char, y_char] = 1;
-						}
-					}
+		if(x_char > -1 && y_char > -1 && x_char < XField && y_char < YField){
+				if(Field[x_char, y_char] == 0){
+					Field[x_char, y_char] = 1;
+				}
+		}
 	}
 
 	//Очистка клеток на след. ход
@@ -221,7 +236,7 @@ public class Battlefields : MonoBehaviour {
 	}
 
 	void OnGUI(){
-		if(GUI.Button (new Rect (Screen.width / 2, Screen.width / 2,Screen.width / 15, Screen.height / 15),"Next Step", JournalMenuStyle)){
+		if(GUI.Button (new Rect (Screen.width / 2, (Screen.height / 10) * 9,Screen.width / 15, Screen.height / 15),"Next Step", JournalMenuStyle)){
 			if(EndOfStep){
 				EndOfStep = false;
 			}
@@ -233,6 +248,8 @@ public class Battlefields : MonoBehaviour {
 	}
 
 	void Update(){
+		if(Input.GetKey(KeyCode.B))
+			Application.LoadLevel("GlobalWorld");
 		if(Input.GetKeyDown(KeyCode.KeypadEnter)){
 			if(EndOfStep){
 				EndOfStep = false;

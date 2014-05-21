@@ -6,8 +6,8 @@ public class Charachters {
 	public int MaxHealt;
 	public int Mana;
 	public int MaxMana;
-	public int GStrength;
 	public string Name;
+	public int GStrength;
 	public int GEndurance;
 	public int GIntelligence;
 	public int GAgility;

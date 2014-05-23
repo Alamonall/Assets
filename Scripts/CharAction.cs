@@ -59,6 +59,7 @@ public class CharAction : MonoBehaviour {
 					GameObject.Find("Main Camera").GetComponent<Battlefields>().Heroes--;
 				GameObject.Find("Main Camera").GetComponent<Battlefields>().KillCell(Mathf.CeilToInt(this.gameObject.transform.position.x/15), Mathf.CeilToInt(this.gameObject.transform.position.y/15));
 				Debug.Log(" Char Enemys = " + GameObject.Find("Main Camera").GetComponent<Battlefields>().Enemys + " Char Heroes = " + GameObject.Find("Main Camera").GetComponent<Battlefields>().Heroes);
+				GameObject.Find("Main Camera").GetComponent<Battlefields>().KillChar(this.gameObject.name);
 				Destroy(this.gameObject);
 			}
 		}

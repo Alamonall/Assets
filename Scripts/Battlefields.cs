@@ -29,6 +29,15 @@ public class Battlefields : MonoBehaviour {
 	public Charachters WhoStep; // кто ходит в данные момент, переменная для боев
 	public int new_x;
 	public int new_y;
+	bool BattleIsEnd = false;
+	int AIState = 0; //при 1 запоминает ходы для ИИ
+	List<int> AIEnemyCoordsX; // координаты игроков для ИИ
+	List<int> AIEnemyCoordsY; // координаты игроков для ИИ
+	int[,] AIField; // поле ддя расчетов ИИ
+	List<float> Differences;
+	bool AIorPlayer = false; // Кто ходит Игрок или ИИ?
+
+
 
 	void Start(){
 		XField = 15;
@@ -54,6 +63,10 @@ public class Battlefields : MonoBehaviour {
 		Turn.Add (new EnemyOne());
 		Turn.Add (new EnemyTwo());
 		Turn.Add (new EnemyThree());
+		AIEnemyCoordsX = new List<int>();
+		AIEnemyCoordsY = new List<int>();
+		Differences = new List<float>();
+		AIField = new int[XField, YField];
 		RenderActCeil();
 		RenderChars();
 		Steps();
@@ -67,12 +80,13 @@ public class Battlefields : MonoBehaviour {
 				//Debug.Log(" i = " + i);
 				while(!GameObject.Find(Turn[i].Type))
 					i++;
+				x_chars = Mathf.CeilToInt(WhoMakeStepNow.transform.position.x/15);
+				y_chars = Mathf.CeilToInt(WhoMakeStepNow.transform.position.y/15);
 				WhoMakeStepNow = GameObject.Find(Turn[i].Type);
 				WhoStep = Turn[i];
-				//if(WhoMakeStepNow.tag != "Enemys"){
+				if(WhoMakeStepNow.tag != "Enemys"){
 						TempActionPoints = Turn[i].ActionPoint;
-						x_chars = Mathf.CeilToInt(WhoMakeStepNow.transform.position.x/15);
-						y_chars = Mathf.CeilToInt(WhoMakeStepNow.transform.position.y/15);
+						
 				//		Debug.Log(" x = " + x_chars + " y = " +  y_chars);
 						move(x_chars, y_chars, Turn[i].ActionPoint);
 						if(!EndOfStep)
@@ -83,11 +97,90 @@ public class Battlefields : MonoBehaviour {
 								ClearAllCeils();
 						     	Steps();
 						}
-				//}
+				}
+				else
+				{
+				AIState = 1;
+				move(x_chars, y_chars, Turn[i].ActionPoint);
+				AIState = 0;
+				for(int j = 0; j < 3; j++){ 
+					Debug.Log(j);
+					Debug.Log("AIEnemyCoordsX = " + AIEnemyCoordsX[j] + "; AIEnemyCoordsY = " + AIEnemyCoordsY[j]);
+					Debug.Log("x_char = " + x_chars + "; y_char = " + y_chars);
+					Debug.Log("DifX = " + (Mathf.Abs(AIEnemyCoordsX[j] - x_chars) + Mathf.Abs(AIEnemyCoordsY[j] - y_chars)));
+					Differences.Add(Mathf.Abs(AIEnemyCoordsX[j] - x_chars) + Mathf.Abs(AIEnemyCoordsY[j] - y_chars));
+				}
+				AIStep();
+				i++;
+				Steps();
+
+				}
 			}
 		else
 			Application.LoadLevel("GlobalWorld");
 	}
+
+	void AIStep(){
+		int Temp = 0;
+		if(Differences[0] <= Differences[1])
+		{
+			if(Differences[0] <= Differences[2])
+				Temp = 0;
+			else
+				Temp = 2;
+		}
+		
+		else
+		{
+			if(Differences[1] <= Differences[2])
+				Temp = 1;
+			else 
+				Temp = 2;
+		}
+		AIorPlayer = true;
+		if(AIField[AIEnemyCoordsX[Temp], AIEnemyCoordsY[Temp]] == 1)
+		{
+			
+			if(AIField[AIEnemyCoordsX[Temp] - 1, AIEnemyCoordsY[Temp] - 1] == 1){
+				MakeTransition(AIEnemyCoordsX[Temp] - 1, AIEnemyCoordsY[Temp] - 1);
+			}
+			else if(AIField[AIEnemyCoordsX[Temp] + 1, AIEnemyCoordsY[Temp] + 1] == 1){
+				MakeTransition(AIEnemyCoordsX[Temp] + 1, AIEnemyCoordsY[Temp] + 1);
+			}
+			else if(AIField[AIEnemyCoordsX[Temp], AIEnemyCoordsY[Temp] - 1] == 1){
+				MakeTransition(AIEnemyCoordsX[Temp], AIEnemyCoordsY[Temp] - 1);
+			}
+			else if(AIField[AIEnemyCoordsX[Temp] + 1, AIEnemyCoordsY[Temp] - 1] == 1){
+				MakeTransition(AIEnemyCoordsX[Temp] + 1, AIEnemyCoordsY[Temp] - 1);
+			}
+			else if(AIField[AIEnemyCoordsX[Temp] + 1, AIEnemyCoordsY[Temp]] == 1){
+				MakeTransition(AIEnemyCoordsX[Temp] + 1, AIEnemyCoordsY[Temp]);
+			}
+			else if(AIField[AIEnemyCoordsX[Temp], AIEnemyCoordsY[Temp] + 1] == 1){
+				MakeTransition(AIEnemyCoordsX[Temp], AIEnemyCoordsY[Temp] + 1);
+			}
+			else if(AIField[AIEnemyCoordsX[Temp] - 1, AIEnemyCoordsY[Temp] + 1] == 1){
+				MakeTransition(AIEnemyCoordsX[Temp] - 1, AIEnemyCoordsY[Temp] + 1);
+			}
+			else if(AIField[AIEnemyCoordsX[Temp] - 1, AIEnemyCoordsY[Temp]] == 1){
+				MakeTransition(AIEnemyCoordsX[Temp] - 1, AIEnemyCoordsY[Temp]);
+			}
+		}
+		else
+		{
+			if(AIField[x_chars + WhoStep.ActionPoint, y_chars]== 1)
+			{
+				MakeTransition(x_chars + WhoStep.ActionPoint, y_chars);
+			}
+			else
+			{
+				MakeTransition(x_chars, y_chars + WhoStep.ActionPoint);
+			}
+		}
+		Differences.Clear();
+
+
+
 
 	public void KillCell(int i, int j){
 		Field[i,j] = 0;
@@ -99,10 +192,7 @@ public class Battlefields : MonoBehaviour {
 		int old_x = Mathf.CeilToInt(WhoMakeStepNow.transform.position.x/15);
 		int old_y = Mathf.CeilToInt(WhoMakeStepNow.transform.position.y/15);
 		Field[old_x, old_y] = 0;
-		//Debug.Log(" TempActionPoints = " + TempActionPoints + " old x = " + Mathf.Abs(Mathf.CeilToInt(WhoMakeStepNow.transform.position.x/15)) + " old y = " + Mathf.Abs(Mathf.CeilToInt(WhoMakeStepNow.transform.position.y/15)));
-		LeftActionPoints = TempActionPoints - (Mathf.Abs(old_x - new_x) + Mathf.Abs(old_y - new_y));
-		//Debug.Log("LeftActionPoints = " + LeftActionPoints + "new x = " + new_x + " new y = " + new_y);
-		//Debug.Log(" NewNew x = " + Mathf.Abs(Mathf.CeilToInt(WhoMakeStepNow.transform.position.x/15) - new_x) + " NewNew y = " + Mathf.Abs(Mathf.CeilToInt(WhoMakeStepNow.transform.position.y/15) - new_y));
+		TempActionPoints = TempActionPoints - (Mathf.Abs(old_x - new_x) + Mathf.Abs(old_y - new_y));
 		WhoMakeStepNow.transform.position = new Vector3(x, y);
 		Field[new_x, new_y] = 3;
 		ClearAllCeils();
@@ -114,6 +204,15 @@ public class Battlefields : MonoBehaviour {
 		else{
 			i++;
 			Steps();
+		}
+	}
+
+	public void KillChar(string byKill)
+	{
+		for(int i = 0; i < Turn.Count; i++){
+			if(Turn[i].Type == byKill){
+				Turn.RemoveAt(i);
+			}
 		}
 	}
 

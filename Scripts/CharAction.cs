@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class CharAction : MonoBehaviour {
-	Charachters Turn; // Кто ходит в данный момент (переменная из Battlefields)
+	GameObject Turn; // Кто ходит в данный момент (переменная из Battlefields)
 	int CanAttack = 0; // Может ли гг атаковать this персонажа
 	string ThisTag; // Тэг this обьекта
 
@@ -59,7 +59,8 @@ public class CharAction : MonoBehaviour {
 				else if(ThisTag == "Charachters")
 					GameObject.Find("Main Camera").GetComponent<Battlefields>().Heroes--;
 				GameObject.Find("Main Camera").GetComponent<Battlefields>().KillCell(Mathf.CeilToInt(this.gameObject.transform.position.x/15), Mathf.CeilToInt(this.gameObject.transform.position.y/15));
-					Destroy(this.gameObject);
+				GameObject.Find("Main Camera").GetComponent<Battlefields>().Field[Mathf.CeilToInt(this.gameObject.transform.position.x/15) ,Mathf.CeilToInt(this.gameObject.transform.position.y/15)] = 0;
+				Destroy(this.gameObject);
 			}
 		}
 	}

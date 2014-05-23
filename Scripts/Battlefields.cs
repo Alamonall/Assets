@@ -14,7 +14,7 @@ public class Battlefields : MonoBehaviour {
 	int i;
 	public int[,] Field;
 	int XField, YField; // размерность поля по вертикали ( XField) и горизонтали (YField)
-	public List<Charachters> Turn;
+	public List<GameObject> Turn;
 	public int Enemys; //кол-во врагов на поле
 	public int Heroes; // кол-во героев на поле
 	public static GameObject WhoMakeStepNow; // Кто делает ход в данный момент
@@ -25,9 +25,8 @@ public class Battlefields : MonoBehaviour {
 	public GUIStyle JournalMenuStyle;
 	public int x_chars; // координаты ГГ в момент хода
 	public int y_chars; // координаты ГГ в момент хода
-	public Charachters WhoStep; // кто ходит в данные момент, переменная для боев
-	public int new_x;
-	public int new_y;
+	public GameObject WhoStep; // кто ходит в данные момент, переменная для боев
+	public int new_x,new_y; //Для запоминания новых координат
 	bool BattleIsEnd = false;
 	int AIState = 0; //при 1 запоминает ходы для ИИ
 	List<int> AIEnemyCoordsX; // координаты игроков для ИИ
@@ -37,7 +36,7 @@ public class Battlefields : MonoBehaviour {
 	bool AIorPlayer = false; // Кто ходит Игрок (false) или ИИ (true)? 
 
 	void Start()
-	{	
+	{
 		i = -1;
 		XField = 15;
 		YField = 5;
@@ -55,16 +54,16 @@ public class Battlefields : MonoBehaviour {
 		Field = new int[XField, YField];
 		AIField = new int[XField, YField]; 
 		ListOfPosCell = new List<GameObject>();
-		Turn = new List<Charachters>();
-		Turn.Add (new HeroOne());
-		Turn.Add (new HeroTwo());
-		Turn.Add (new HeroThree());
-		Turn.Add (new EnemyOne());
-		Turn.Add (new EnemyTwo());
-		Turn.Add (new EnemyThree());
-		RenderActCell();
-		RenderChars();
-		Steps();
+		Turn = new List<GameObject>();
+		Turn.Add (HeroOne());
+		Turn.Add (HeroTwo());
+		Turn.Add (HeroThree());
+		Turn.Add (EnemyOne());
+		Turn.Add (EnemyTwo());
+		Turn.Add (EnemyThree());
+		//RenderActCell();
+		//RenderChars();
+		//Steps();
 	}
 	
 	public void Steps(){
@@ -74,9 +73,9 @@ public class Battlefields : MonoBehaviour {
 		{
 				int h = Enemys + Heroes;
 				i = i % h;
-				while(!GameObject.Find(Turn[i].Type))
-					i++;
-				WhoMakeStepNow = GameObject.Find(Turn[i].Type);
+				if(!Turn[i])
+					Steps();
+				WhoMakeStepNow = GameObject.Find(Turn[i]).GetComponent<GameObject>().
 				WhoStep = Turn[i];
 				TempActionPoints = Turn[i].ActionPoint;
 				x_chars = Mathf.CeilToInt(WhoMakeStepNow.transform.position.x/15);
@@ -177,8 +176,10 @@ public class Battlefields : MonoBehaviour {
 		new_y = Mathf.CeilToInt(y/15);
 		Field[x_chars, y_chars] = 0;
 		Field[new_x, new_y] = 3;
-		TempActionPoints =- (Mathf.Abs(x_chars - new_x) + Mathf.Abs(y_chars - new_y));
+		TempActionPoints -= (Mathf.Abs(x_chars - new_x) + Mathf.Abs(y_chars - new_y));
 		WhoMakeStepNow.transform.position = new Vector3(x, y);
+		x_chars = new_x;
+		y_chars = new_y;
 		if(TempActionPoints > 0)
 		{
 			ClearAllCells();
@@ -217,22 +218,16 @@ public class Battlefields : MonoBehaviour {
 					{
 						Instantiate(WarriorTexture, new Vector3( i * 15, j * 15, -10),Quaternion.identity);
 						Field[i,j] = 3;
-						AIEnemyCoordsX.Add(i);
-						AIEnemyCoordsY.Add(j);
 					}
 					if(j == 2)
 					{
 						Instantiate(ArcherTexture, new Vector3(i * 15 , j * 15, -10),Quaternion.identity);
 						Field[i,j] = 3;
-						AIEnemyCoordsX.Add(i);
-						AIEnemyCoordsY.Add(j);
 					}
 					if(j == 4)
 					{
 						Instantiate(MageTexture, new Vector3(i * 15 , j * 15, -10),Quaternion.identity);
 						Field[i,j] = 3;
-						AIEnemyCoordsX.Add(i);
-						AIEnemyCoordsY.Add(j);
 					}
 				}
 			}

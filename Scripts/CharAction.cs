@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class CharAction : MonoBehaviour {
-	Charachters Turn; // Кто ходит в данный момент (переменная из Battlefields)
+	GameObject Turn; // Кто ходит в данный момент (переменная из Battlefields)
 	int CanAttack = 0; // Может ли гг атаковать this персонажа
 	string ThisTag; // Тэг this обьекта
 
@@ -18,6 +18,7 @@ public class CharAction : MonoBehaviour {
 			CutMove();
 		}
 	}
+
 	//Функция, которая проверяет есть ли враг поблизости 
 	void CutMove(){
 		float xAttack = GameObject.Find(Turn.Type).transform.position.x/15;
@@ -52,13 +53,13 @@ public class CharAction : MonoBehaviour {
 	void Update () {
 		if(Input.GetMouseButton(0)){
 			if(CanAttack == 2){
-				GameObject.Find("Main Camera").GetComponent<Battlefields>().LeftActionPoints = 0;
+				GameObject.Find("Main Camera").GetComponent<Battlefields>().Steps();
 				if(ThisTag == "Enemys")
 					GameObject.Find("Main Camera").GetComponent<Battlefields>().Enemys--;
 				else if(ThisTag == "Charachters")
 					GameObject.Find("Main Camera").GetComponent<Battlefields>().Heroes--;
 				GameObject.Find("Main Camera").GetComponent<Battlefields>().KillCell(Mathf.CeilToInt(this.gameObject.transform.position.x/15), Mathf.CeilToInt(this.gameObject.transform.position.y/15));
-				Debug.Log(" Char Enemys = " + GameObject.Find("Main Camera").GetComponent<Battlefields>().Enemys + " Char Heroes = " + GameObject.Find("Main Camera").GetComponent<Battlefields>().Heroes);
+				GameObject.Find("Main Camera").GetComponent<Battlefields>().Field[Mathf.CeilToInt(this.gameObject.transform.position.x/15) ,Mathf.CeilToInt(this.gameObject.transform.position.y/15)] = 0;
 				Destroy(this.gameObject);
 			}
 		}

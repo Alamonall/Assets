@@ -6,8 +6,8 @@ public class Battlefields : MonoBehaviour {
 	Object WarriorTexture;
 	Object ArcherTexture;
 	Object MageTexture;
-	Object ActCeil;
-	Object PosCeil;
+	Object ActCell;
+	Object PosCell;
 	Object En1;
 	Object En2;
 	Object En3;
@@ -19,43 +19,47 @@ public class Battlefields : MonoBehaviour {
 	public int Heroes; // кол-во героев на поле
 	public static GameObject WhoMakeStepNow; // Кто делает ход в данный момент
 	public static bool EndOfStep; // Если true - значит ход сделан
-	public int TempActionPoints;
+	public int TempActionPoints; // Текущее кол-во экшн поинтов
 	public static bool frag; // Отвечает за уничтожение this.обьектов
-	List<GameObject> ListOfPosCeil;
+	List<GameObject> ListOfPosCell;
 	public GUIStyle JournalMenuStyle;
 	public int x_chars; // координаты ГГ в момент хода
 	public int y_chars; // координаты ГГ в момент хода
-	public int LeftActionPoints; // отвечает за кол-во оставшихся шагов 
 	public Charachters WhoStep; // кто ходит в данные момент, переменная для боев
 	public int new_x;
 	public int new_y;
-	bool BattleIsEnd = false;
-	int AIState = 0; //при 1 запоминает ходы для ИИ
-	List<int> AIEnemyCoordsX; // координаты игроков для ИИ
-	List<int> AIEnemyCoordsY; // координаты игроков для ИИ
+	bool AIState = false; //при 1 запоминает ходы для ИИ
+	int[] AIEnemyCoordsX = {14,14,14}; // координаты игроков для ИИ
+	int[] AIEnemyCoordsY = {0,2,4}; // координаты игроков для ИИ
 	int[,] AIField; // поле ддя расчетов ИИ
-	List<float> Differences;
-	bool AIorPlayer = false; // Кто ходит Игрок или ИИ?
-
-
+	int[] Differences;
+	int WALL = -1; // непроходимая ячейка
+	int BLANK = -2; // свободная непомеченная ячейка
+	int HERO = 3; // ячейка, в которой находится герой
+	int ENEMY = 2;// ячейка, в которой находится враг
+	int EMPTY = 0; // свободная ячейка
+	int[] px, py; // координаты точек на пути
+	int len; //длина пути
 
 	void Start(){
+		i = -1;
 		XField = 15;
 		YField = 5;
 		Enemys = 3;
 		Heroes = 3;
+		px = new int [XField*YField];
+		py = new int [XField*YField];
 		frag = false;
-		EndOfStep = false;
 		WarriorTexture = Resources.Load("HeroOne");
 		ArcherTexture = Resources.Load("HeroTwo");
 		MageTexture = Resources.Load("HeroThree");
-		ActCeil = Resources.Load("Cell_Act");
-		PosCeil = Resources.Load("Cell_Pos");
+		ActCell = Resources.Load("Cell_Act");
+		PosCell = Resources.Load("Cell_Pos");
 		En1 = Resources.Load("EnemyOne");
 		En2 = Resources.Load("EnemyTwo");
 		En3 = Resources.Load("EnemyThree");
 		Field = new int[XField, YField];
-		ListOfPosCeil = new List<GameObject>();
+		ListOfPosCell = new List<GameObject>();
 		Turn = new List<Charachters>();
 		Turn.Add (new HeroOne());
 		Turn.Add (new HeroTwo());
@@ -63,63 +67,50 @@ public class Battlefields : MonoBehaviour {
 		Turn.Add (new EnemyOne());
 		Turn.Add (new EnemyTwo());
 		Turn.Add (new EnemyThree());
-		AIEnemyCoordsX = new List<int>();
-		AIEnemyCoordsY = new List<int>();
-		Differences = new List<float>();
+		Differences = new int[3];
 		AIField = new int[XField, YField];
-		RenderActCeil();
+		RenderActCell();
 		RenderChars();
+		PrintMy("AI ", AIField,XField,YField);
 		Steps();
 	}
 	
-	void Steps(){
+	public void Steps(){
+		i++;
+		ClearAllCells();
 		if(Heroes > 0 && Enemys > 0){
-				Debug.Log(" Enemys = " + Enemys + " Heroes = " + Heroes);
 				int h = Enemys + Heroes;
 				i = i % h;
-				//Debug.Log(" i = " + i);
-				while(!GameObject.Find(Turn[i].Type))
-					i++;
-				x_chars = Mathf.CeilToInt(WhoMakeStepNow.transform.position.x/15);
-				y_chars = Mathf.CeilToInt(WhoMakeStepNow.transform.position.y/15);
 				WhoMakeStepNow = GameObject.Find(Turn[i].Type);
 				WhoStep = Turn[i];
-				if(WhoMakeStepNow.tag != "Enemys"){
-						TempActionPoints = Turn[i].ActionPoint;
-						
-				//		Debug.Log(" x = " + x_chars + " y = " +  y_chars);
-						move(x_chars, y_chars, Turn[i].ActionPoint);
-						if(!EndOfStep)
-							RenderPosCeil();
-						if(EndOfStep){
-								EndOfStep = false;
-								i++;
-								ClearAllCeils();
-						     	Steps();
-						}
+				TempActionPoints = WhoStep.ActionPoint;
+				x_chars = Mathf.CeilToInt(WhoMakeStepNow.transform.position.x/15);
+				y_chars = Mathf.CeilToInt(WhoMakeStepNow.transform.position.y/15);
+				if(WhoMakeStepNow.tag != "Enemys")
+				{		
+						move(x_chars, y_chars, TempActionPoints);
+						RenderPosCell();
 				}
 				else
 				{
-				AIState = 1;
-				move(x_chars, y_chars, Turn[i].ActionPoint);
-				AIState = 0;
-				for(int j = 0; j < 3; j++){ 
-					Debug.Log(j);
-					Debug.Log("AIEnemyCoordsX = " + AIEnemyCoordsX[j] + "; AIEnemyCoordsY = " + AIEnemyCoordsY[j]);
-					Debug.Log("x_char = " + x_chars + "; y_char = " + y_chars);
-					Debug.Log("DifX = " + (Mathf.Abs(AIEnemyCoordsX[j] - x_chars) + Mathf.Abs(AIEnemyCoordsY[j] - y_chars)));
-					Differences.Add(Mathf.Abs(AIEnemyCoordsX[j] - x_chars) + Mathf.Abs(AIEnemyCoordsY[j] - y_chars));
+//					PrintMy("AIECX ", AIEnemyCoordsX);
+//					PrintMy("AIECY ",AIEnemyCoordsY);
+					AIState = true;
+					move(x_chars, y_chars, Turn[i].ActionPoint);
+					AIState = false;
+					for(int j = 0; j < 3; j++){ 
+						Differences[j] = (Mathf.Abs(AIEnemyCoordsX[j] - x_chars) + Mathf.Abs(AIEnemyCoordsY[j] - y_chars));
+					}
+					AIStep();
 				}
-				AIStep();
-				i++;
-				Steps();
-
-				}
-			}
+		}
 		else
+		{
 			Application.LoadLevel("GlobalWorld");
+		}
 	}
 
+	#region AI
 	void AIStep(){
 		int Temp = 0;
 		if(Differences[0] <= Differences[1])
@@ -137,76 +128,150 @@ public class Battlefields : MonoBehaviour {
 			else 
 				Temp = 2;
 		}
-		AIorPlayer = true;
-		if(AIField[AIEnemyCoordsX[Temp], AIEnemyCoordsY[Temp]] == 1)
+		print("X = " + AIEnemyCoordsX[Temp] + " Y =  " + AIEnemyCoordsY[Temp]);
+		if(AIField[AIEnemyCoordsX[Temp], AIEnemyCoordsY[Temp]] == 1) //проверка координатов ближайшего врага на то, есть ли он в пределах досягаемости
 		{
-			
+			print("Enemy Cloee!");
+			//выбираем ближайшую точку и атакуем
 			if(AIField[AIEnemyCoordsX[Temp] - 1, AIEnemyCoordsY[Temp] - 1] == 1){
-				MakeTransition(AIEnemyCoordsX[Temp] - 1, AIEnemyCoordsY[Temp] - 1);
+				AIMakeTransition(AIEnemyCoordsX[Temp] - 1, AIEnemyCoordsY[Temp] - 1);
+				//функция атаки
 			}
 			else if(AIField[AIEnemyCoordsX[Temp] + 1, AIEnemyCoordsY[Temp] + 1] == 1){
-				MakeTransition(AIEnemyCoordsX[Temp] + 1, AIEnemyCoordsY[Temp] + 1);
+				AIMakeTransition(AIEnemyCoordsX[Temp] + 1, AIEnemyCoordsY[Temp] + 1);
+				//функция атаки
 			}
 			else if(AIField[AIEnemyCoordsX[Temp], AIEnemyCoordsY[Temp] - 1] == 1){
-				MakeTransition(AIEnemyCoordsX[Temp], AIEnemyCoordsY[Temp] - 1);
+				AIMakeTransition(AIEnemyCoordsX[Temp], AIEnemyCoordsY[Temp] - 1);
+				//функция атаки
 			}
 			else if(AIField[AIEnemyCoordsX[Temp] + 1, AIEnemyCoordsY[Temp] - 1] == 1){
-				MakeTransition(AIEnemyCoordsX[Temp] + 1, AIEnemyCoordsY[Temp] - 1);
+				AIMakeTransition(AIEnemyCoordsX[Temp] + 1, AIEnemyCoordsY[Temp] - 1);
+				//функция атаки
 			}
 			else if(AIField[AIEnemyCoordsX[Temp] + 1, AIEnemyCoordsY[Temp]] == 1){
-				MakeTransition(AIEnemyCoordsX[Temp] + 1, AIEnemyCoordsY[Temp]);
+				AIMakeTransition(AIEnemyCoordsX[Temp] + 1, AIEnemyCoordsY[Temp]);
+				//функция атаки
 			}
 			else if(AIField[AIEnemyCoordsX[Temp], AIEnemyCoordsY[Temp] + 1] == 1){
-				MakeTransition(AIEnemyCoordsX[Temp], AIEnemyCoordsY[Temp] + 1);
+				AIMakeTransition(AIEnemyCoordsX[Temp], AIEnemyCoordsY[Temp] + 1);
+				//функция атаки
 			}
 			else if(AIField[AIEnemyCoordsX[Temp] - 1, AIEnemyCoordsY[Temp] + 1] == 1){
-				MakeTransition(AIEnemyCoordsX[Temp] - 1, AIEnemyCoordsY[Temp] + 1);
+				AIMakeTransition(AIEnemyCoordsX[Temp] - 1, AIEnemyCoordsY[Temp] + 1);
+				//функция атаки
 			}
 			else if(AIField[AIEnemyCoordsX[Temp] - 1, AIEnemyCoordsY[Temp]] == 1){
-				MakeTransition(AIEnemyCoordsX[Temp] - 1, AIEnemyCoordsY[Temp]);
+				AIMakeTransition(AIEnemyCoordsX[Temp] - 1, AIEnemyCoordsY[Temp]);
 			}
 		}
-		else
+		else //если враг не в пределах досягаемости смотрим как к нему придти
 		{
-			if(AIField[x_chars + WhoStep.ActionPoint, y_chars]== 1)
-			{
-				MakeTransition(x_chars + WhoStep.ActionPoint, y_chars);
-			}
-			else
-			{
-				MakeTransition(x_chars, y_chars + WhoStep.ActionPoint);
-			}
+			AIWaveAlgorithm(x_chars, y_chars, AIEnemyCoordsX[Temp], AIEnemyCoordsY[Temp]);
+			AIMakeTransition(px[WhoStep.ActionPoint],py[WhoStep.ActionPoint]);
 		}
-		Differences.Clear();
+	}
+	#endregion
+	
+		void AIWaveAlgorithm(int ax,int ay,int bx, int by)   // поиск пути из ячейки (ax, ay) в ячейку (bx, by)
+		{
+			int[] dx = {1, 0, -1, 0};   // смещения, соответствующие соседям ячейки
+			int[] dy = {0, 1, 0, -1};   // справа, снизу, слева и сверху
+			int d, x, y, k;
+			bool stop = false;
+			for(int q = 0; q < XField; q++)
+				for(int w = 0; w < YField; w++)
+					if(AIField[q,w] == 1 || AIField[q,w] >= 0)
+						AIField[q,w] = BLANK;
 
+			PrintMy("Opps",AIField,15,5);
+			// распространение волны
+			d = 0;         // стартовая ячейка помечена 0
+			AIField[ax,ay] = 0;
+			do{
+				stop = true;               // предполагаем, что все свободные клетки уже помечены
+				for ( x = 0; x < XField; x++ )
+					for ( y = 0; y < YField; y++ )
+						if( AIField[x,y] == d )
+							for ( k = 0; k < 4; k++ ) // проходим по всем непомеченным соседям
+							{         
+								if(( x + dx[k] ) > -1 && ( y + dy[k] ) > -1 && ( x + dx[k] ) < XField && ( y + dy[k] ) < YField)
+								{
+									if ( AIField[x + dx[k], y + dy[k]] == BLANK )
+									{
+										stop = false;                            // найдены непомеченные клетки
+										AIField[x + dx[k], y + dy[k]] = d + 1;      // распространяем волну
+									}
+								}
+							}
+					d++;
+		}while (!stop && AIField[bx,by] == BLANK);
 
+			// восстановление пути
+			len = AIField[bx,by];            // длина кратчайшего пути из (ax, ay) в (bx, by)
+			x = bx;
+			y = by;
+			d = len;
+			while ( d > 0 )
+			{
+				px[d] = x;
+				py[d] = y;                   // записываем ячейку (x, y) в путь
+				d--;
+				for ( k = 0; k < 4; k++ ){
+					if(( x + dx[k] ) > -1 && ( y + dy[k] ) > -1 && ( x + dx[k] ) < XField && ( y + dy[k] ) < YField )
+						if ( AIField[x + dx[k], y + dy[k]] == d )
+						{
+							x = x + dx[k];
+							y = y + dy[k];           // переходим в ячейку, которая на 1 ближе к старту
+							break;
+						}
+				}
+			}
+			px[0] = ax;
+			py[0] = ay;                    // теперь px[0..len] и py[0..len] - координаты ячеек пути
+			PrintMy("End",AIField,15,5);
+	}
 
 
 	public void KillCell(int i, int j){
-		Field[i,j] = 0;
+		Field[i,j] = EMPTY;
 	}
+
 	//Передвижение персонажа на клетку с координатами (x, y)
 	public void MakeTransition(float x, float y){
 		new_x = Mathf.CeilToInt(x/15);
 		new_y = Mathf.CeilToInt(y/15);
-		int old_x = Mathf.CeilToInt(WhoMakeStepNow.transform.position.x/15);
-		int old_y = Mathf.CeilToInt(WhoMakeStepNow.transform.position.y/15);
-		Field[old_x, old_y] = 0;
-		TempActionPoints = TempActionPoints - (Mathf.Abs(old_x - new_x) + Mathf.Abs(old_y - new_y));
+		TempActionPoints -= (Mathf.Abs(x_chars - new_x) + Mathf.Abs(y_chars - new_y));
+		AIEnemyCoordsX[i] = (new_x);
+		AIEnemyCoordsY[i] = (new_y);
+		Field[x_chars, y_chars] = EMPTY;
+		Field[new_x, new_y] = HERO;
 		WhoMakeStepNow.transform.position = new Vector3(x, y);
-		Field[new_x, new_y] = 3;
-		ClearAllCeils();
-		if(LeftActionPoints != 0){
-			move(new_x, new_y, LeftActionPoints);
-			RenderPosCeil();	
-			TempActionPoints = LeftActionPoints;
+		if(TempActionPoints > 0)
+		{
+			x_chars = new_x;
+			y_chars = new_y;
+			ClearAllCells();
+			move(new_x, new_y, TempActionPoints);
+			RenderPosCell();	
 		}
-		else{
-			i++;
+		else
 			Steps();
-		}
+	}
+	//Передвижение ИИ на клетку с координатами (x, y)
+	public void AIMakeTransition(float x, float y)
+	{
+		new_x = Mathf.CeilToInt(x);
+		new_y = Mathf.CeilToInt(y);
+		Field[x_chars, y_chars] = EMPTY;
+		Field[new_x, new_y] = ENEMY;
+		AIField[x_chars, y_chars] = BLANK;
+		AIField[new_x, new_y] = WALL;
+		WhoMakeStepNow.transform.position = new Vector3(x*15, y*15);
+		Steps();
 	}
 
+	//функция удаления персонажа из очереди при его убийстве
 	public void KillChar(string byKill)
 	{
 		for(int i = 0; i < Turn.Count; i++){
@@ -223,29 +288,32 @@ public class Battlefields : MonoBehaviour {
 				if(i == 0){
 					if(j == 0){
 						Instantiate(En1, new Vector3(i * 15, j * 15, -10),Quaternion.identity);
-						Field[i,j] = 2;
+						Field[i,j] = ENEMY;
+						AIField[i,j] = WALL;
 					}
 					if(j == 2){
 						Instantiate(En2, new Vector3(i * 15, j * 15, -10),Quaternion.identity);
-						Field[i,j] = 2;
+						Field[i,j] = ENEMY;
+						AIField[i,j] = WALL;
 					}
 					if(j == 4){
 						Instantiate(En3, new Vector3(i * 15, j * 15, -10),Quaternion.identity);
-						Field[i,j] = 2;
+						Field[i,j] = ENEMY;
+						AIField[i,j] = WALL;
 					}
 				}
 				if(i == 14){
 					if(j == 0){
 						Instantiate(WarriorTexture, new Vector3( i * 15, j * 15, -10),Quaternion.identity);
-						Field[i,j] = 3;
+						Field[i,j] = HERO;
 					}
 					if(j == 2){
 						Instantiate(ArcherTexture, new Vector3(i * 15 , j * 15, -10),Quaternion.identity);
-						Field[i,j] = 3;
+						Field[i,j] = HERO;	
 					}
 					if(j == 4){
 						Instantiate(MageTexture, new Vector3(i * 15 , j * 15, -10),Quaternion.identity);
-						Field[i,j] = 3;
+						Field[i,j] = HERO;
 					}
 				}
 			}
@@ -254,38 +322,45 @@ public class Battlefields : MonoBehaviour {
 	}
 
 	// Отрисовка клеток
-	void RenderActCeil(){
+	void RenderActCell(){
 		for(int i = 0; i < XField; i++){
 			for(int j = 0; j < YField; j++){
-				Instantiate(ActCeil, new Vector3(i * 15, j * 15),Quaternion.identity);
+				Instantiate(ActCell, new Vector3(i * 15, j * 15),Quaternion.identity);
 				if(Field[i,j] != 1 || Field[i,j] != 2 || Field[i,j]!= 3){
-					Field[i,j] = 0;
+					Field[i,j] = EMPTY;
+					AIField[i,j] = BLANK;
 				}
 			}
 		}
+
 	}
 
 	// Отрисовка возможных ходов 
-	void RenderPosCeil(){
+	void RenderPosCell(){
 		for(int i = 0; i < XField; i++){
 			for(int j = 0; j < YField; j++){
 				if(Field[i,j] == 1){
-					ListOfPosCeil.Add(Instantiate(PosCeil, new Vector3(i * 15,j * 15),Quaternion.identity) as GameObject);
+					ListOfPosCell.Add(Instantiate(PosCell, new Vector3(i * 15,j * 15),Quaternion.identity) as GameObject);
 				}
 			}
 		}	
 	}
 
 	//функция вывода массива
-	void PrintMy(string sec){
-		string next = "PrintMy " + sec + " \n";
-		for(int i = 0; i < XField; i++){
+	void PrintMy(string sec, int[,] mass, int x, int y){
+		string next = "PrintMy " + sec + ":\n";
+		for(int i = 0; i < y; i++){
 			next+= "\n";
-			for(int j = 0; j < YField; j++){
-				next += Field[i,j];
-			}
+			for(int j = 0; j < x; j++)
+				next += mass[j,i];
 		}	
 		print(next);
+	}
+
+	void PrintMy(string message, int[] A){
+		print (message);
+		for(int i = 0; i < A.Length; i++)
+			print(i+ " = " + A[i]);
 	}
 
 	//Подсчет возможных ходов для персонажа, x и y_char координаты персонажа в массиве поля
@@ -305,23 +380,19 @@ public class Battlefields : MonoBehaviour {
 			if(x_char <= XField && y_char < YField){
 				move(x_char,y_char + 1, step - 1);
 			}
-//			if(x_char > -1 && y_char > -1 && x_char < XField && y_char < YField){
-//				if(Field[x_char, y_char] == 0){
-//					//Debug.Log(" i = " + x_char + " j = " + y_char);
-//					Field[x_char, y_char] = 1;
-//					//Debug.Log(Field[x_char,y_char]);
-//					}
-//				}
-			}
+		}
 		if(x_char > -1 && y_char > -1 && x_char < XField && y_char < YField){
 				if(Field[x_char, y_char] == 0){
-					Field[x_char, y_char] = 1;
+					if(AIState)
+						AIField[x_char,y_char] = 1;
+					else
+						Field[x_char, y_char] = 1;
 				}
 		}
 	}
 
 	//Очистка клеток на след. ход
-	void ClearAllCeils(){
+	void ClearAllCells(){
 		for(int i = 0; i < XField; i++){
 			for(int j = 0; j < YField; j++){
 				if(Field[i,j] == 1){
@@ -329,19 +400,14 @@ public class Battlefields : MonoBehaviour {
 				}
 			}
 		}
-		for(int i = 0; i < ListOfPosCeil.Count; i++ ){
-			Destroy(ListOfPosCeil[i]);
+		for(int i = 0; i < ListOfPosCell.Count; i++ ){
+			Destroy(ListOfPosCell[i]);
 		}
 	}
 
 	void OnGUI(){
-		if(GUI.Button (new Rect (Screen.width / 2, (Screen.height / 10) * 9,Screen.width / 15, Screen.height / 15),"Next Step", JournalMenuStyle)){
-			if(EndOfStep){
-				EndOfStep = false;
-			}
-			else if(!EndOfStep){
-				EndOfStep = true;
-			}
+		GUI.TextField(new Rect(0, Screen.height - 230, 200, 230),WhoStep.Type,JournalMenuStyle);
+		if(GUI.Button (new Rect (Screen.width - 200, Screen.height - 100, 200, 100),"Next Step", JournalMenuStyle)){
 			Steps();
 	  }
 	}
@@ -350,13 +416,7 @@ public class Battlefields : MonoBehaviour {
 		if(Input.GetKey(KeyCode.B))
 			Application.LoadLevel("GlobalWorld");
 		if(Input.GetKeyDown(KeyCode.KeypadEnter)){
-			if(EndOfStep){
-				EndOfStep = false;
-			}
-			else if(!EndOfStep){
-				EndOfStep = true;
-			}
-			Steps();
+			MakeTransition(WhoMakeStepNow.transform.position.x,WhoMakeStepNow.transform.position.y);
 		}
 	}
 }

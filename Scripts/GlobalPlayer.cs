@@ -5,13 +5,11 @@ public class GlobalPlayer : MonoBehaviour {
 	private Animator anim;
 	private Camera Camera;
 	private Transform Player;
-
 	public int Speed = 5; // скорость хождения
 	public int Ran = 0;
 	private float CurX = -8; // Стартовые координаты ГГ
 	private float CurY = -13; // Стартовые координаты ГГ
 	private float CurZ = 1; // Стартовые координаты ГГ
-
 	private string Profile = "Prof1"; //Какой профиль загружен
 	public static bool Battle = false; 
 	public string TypeOfLocation; // Отвечат за то, на каком типе территории находится ГГ

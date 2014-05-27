@@ -52,7 +52,7 @@ public class CharAction : MonoBehaviour {
 	void Update () {
 		if(Input.GetMouseButton(0)){
 			if(CanAttack == 2){
-				GameObject.Find("Main Camera").GetComponent<Battlefields>().LeftActionPoints = 0;
+				GameObject.Find("Main Camera").GetComponent<Battlefields>().TempActionPoints = 0;
 				if(ThisTag == "Enemys")
 					GameObject.Find("Main Camera").GetComponent<Battlefields>().Enemys--;
 				else if(ThisTag == "Charachters")

@@ -28,9 +28,11 @@ public class Battlefields : MonoBehaviour {
 	public Charachters WhoStep; // кто ходит в данные момент, переменная для боев
 	public int new_x;
 	public int new_y;
+	public bool Attack = false;
 	bool AIState = false; //при 1 запоминает ходы для ИИ
-	int[] AIEnemyCoordsX = {14,14,14}; // координаты игроков для ИИ
-	int[] AIEnemyCoordsY = {0,2,4}; // координаты игроков для ИИ
+	public int[] AIEnemyCoordsX = {14,14,14}; // координаты игроков для ИИ
+	public int[] AIEnemyCoordsY = {0,2,4}; // координаты игроков для ИИ
+	public int Temp;
 	int[,] AIField; // поле ддя расчетов ИИ
 	int[] Differences;
 	int WALL = -1; // непроходимая ячейка
@@ -112,7 +114,7 @@ public class Battlefields : MonoBehaviour {
 
 	#region AI
 	void AIStep(){
-		int Temp = 0;
+		Temp = 0;
 		if(Differences[0] <= Differences[1])
 		{
 			if(Differences[0] <= Differences[2])
@@ -135,35 +137,46 @@ public class Battlefields : MonoBehaviour {
 			//выбираем ближайшую точку и атакуем
 			if(AIField[AIEnemyCoordsX[Temp] - 1, AIEnemyCoordsY[Temp] - 1] == 1){
 				AIMakeTransition(AIEnemyCoordsX[Temp] - 1, AIEnemyCoordsY[Temp] - 1);
+				Attack = true;
 				//функция атаки
 			}
 			else if(AIField[AIEnemyCoordsX[Temp] + 1, AIEnemyCoordsY[Temp] + 1] == 1){
 				AIMakeTransition(AIEnemyCoordsX[Temp] + 1, AIEnemyCoordsY[Temp] + 1);
+				Attack = true;
 				//функция атаки
 			}
 			else if(AIField[AIEnemyCoordsX[Temp], AIEnemyCoordsY[Temp] - 1] == 1){
 				AIMakeTransition(AIEnemyCoordsX[Temp], AIEnemyCoordsY[Temp] - 1);
+				Attack = true;
 				//функция атаки
 			}
 			else if(AIField[AIEnemyCoordsX[Temp] + 1, AIEnemyCoordsY[Temp] - 1] == 1){
 				AIMakeTransition(AIEnemyCoordsX[Temp] + 1, AIEnemyCoordsY[Temp] - 1);
+				Attack = true;
 				//функция атаки
 			}
 			else if(AIField[AIEnemyCoordsX[Temp] + 1, AIEnemyCoordsY[Temp]] == 1){
 				AIMakeTransition(AIEnemyCoordsX[Temp] + 1, AIEnemyCoordsY[Temp]);
+				Attack = true;
 				//функция атаки
 			}
 			else if(AIField[AIEnemyCoordsX[Temp], AIEnemyCoordsY[Temp] + 1] == 1){
 				AIMakeTransition(AIEnemyCoordsX[Temp], AIEnemyCoordsY[Temp] + 1);
+				Attack = true;
 				//функция атаки
 			}
 			else if(AIField[AIEnemyCoordsX[Temp] - 1, AIEnemyCoordsY[Temp] + 1] == 1){
 				AIMakeTransition(AIEnemyCoordsX[Temp] - 1, AIEnemyCoordsY[Temp] + 1);
+				Attack = true;
 				//функция атаки
 			}
 			else if(AIField[AIEnemyCoordsX[Temp] - 1, AIEnemyCoordsY[Temp]] == 1){
 				AIMakeTransition(AIEnemyCoordsX[Temp] - 1, AIEnemyCoordsY[Temp]);
+				Attack = true;
+				//функция атаки
+
 			}
+			Steps();
 		}
 		else //если враг не в пределах досягаемости смотрим как к нему придти
 		{
@@ -172,7 +185,7 @@ public class Battlefields : MonoBehaviour {
 		}
 	}
 	#endregion
-	
+
 		void AIWaveAlgorithm(int ax,int ay,int bx, int by)   // поиск пути из ячейки (ax, ay) в ячейку (bx, by)
 		{
 			int[] dx = {1, 0, -1, 0};   // смещения, соответствующие соседям ячейки

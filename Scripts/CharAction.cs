@@ -50,6 +50,13 @@ public class CharAction : MonoBehaviour {
 	}
 
 	void Update () {
+		if(GameObject.Find("Main Camera").GetComponent<Battlefields>().Attack){
+			if(GameObject.Find("Main Camera").GetComponent<Battlefields>().AIEnemyCoordsX[GameObject.Find("Main Camera").GetComponent<Battlefields>().Temp] == (this.gameObject.transform.position.x/15) && GameObject.Find("Main Camera").GetComponent<Battlefields>().AIEnemyCoordsY[GameObject.Find("Main Camera").GetComponent<Battlefields>().Temp] == (this.gameObject.transform.position.y/15)){
+				GameObject.Find("Main Camera").GetComponent<Battlefields>().KillChar(this.gameObject.name);
+				Destroy(this.gameObject);
+			}
+
+		}
 		if(Input.GetMouseButton(0)){
 			if(CanAttack == 2){
 				GameObject.Find("Main Camera").GetComponent<Battlefields>().TempActionPoints = 0;

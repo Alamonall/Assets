@@ -2,15 +2,14 @@
 using System.Collections;
 
 public class MainMenu : MonoBehaviour {
-	public bool GameMode = true; 
-	public bool ActivMenu = false;
-	public bool LoadMenu = false; 
-	public bool SaveMenu = false; 
-	public bool NewConMenu = false; 
-	public bool Pause = false; 
-	public bool InventoryMenu = false; 
-	public bool JournalMenu = false; 
-	public bool SettingsMenu = false; 
+	bool GameMode = true; 
+	bool ActivMenu = false;
+	bool LoadMenu = false; 
+	bool SaveMenu = false; 
+	bool NewConMenu = false; 
+	bool InventoryMenu = false; 
+	bool JournalMenu = false; 
+	bool SettingsMenu = false; 
 	public GUIStyle ButtonMenuStyle;
 	public GUIStyle BackgroundMenuStyle;
 	public GUIStyle InventoryMenuStyle;
@@ -81,26 +80,7 @@ public class MainMenu : MonoBehaviour {
 		
 		GUI.EndGroup ();
 		}
-//	void OnMouseEnter(){
-//		if (this.gameObject.name == "Inventory") {
-//			InventoryS = true;	
-//			Debug.Log ("Mouse in");
-//		}
-//		if (this.gameObject.name == "Settings")
-//			Settings = true;
-//		if (this.gameObject.name == "Journal")
-//			Journal = true;	
-//	}
-//	void OnMouseExit(){
-//		if (this.gameObject.name == "Inventory") {
-//				InventoryS = false;
-//				Debug.Log ("Mouse out");
-//				}
-//		if (this.gameObject.name == "Settings")
-//			Settings = false;
-//		if (this.gameObject.name == "Journal")
-//			Journal = false;	
-//	}
+
 	#region MainMenu
 	void main_menu(){
 		GUI.BeginGroup (new Rect (Screen.width / 100, Screen.height / 20, 256, 450),BackgroundMenuStyle);
@@ -150,42 +130,6 @@ public class MainMenu : MonoBehaviour {
 		GUI.EndGroup ();
 		}
 	#endregion 
-//	#region WorkWith
-//	void WorkWithInvetary (){
-//		// функция меню инвентаря
-//		if(ShowInventory){
-//			Debug.Log ("Инвентарь выключен");
-//			ShowInventory = false;
-//			Destroy(InventoryPrefab);
-//			Time.timeScale = 1;
-//
-//		}
-//		else{
-//			Debug.Log("Включен инвентарь");
-//			ShowInventory = true;
-//			Time.timeScale = 0;
-//			InventoryPrefab = (GameObject)Instantiate(Resources.Load("Inventory"),new Vector3(-12,-20,0),Quaternion.identity);
-//		}
-//	}
-//	void WorkWithJournal(){
-//		if (ShowJournal) {
-//			Debug.Log ("Включен журнал");
-//			ShowJournal = false;
-//			Time.timeScale = 1;
-//		}
-//		else {
-//			ShowJournal = true;
-//			Debug.Log ("Выключен журнал");
-//			Time.timeScale = 0;
-//		}
-//	}
-//	void WorkWithSettings(){
-//		if (ShowSettings) {
-//		}
-//		else {
-//		}
-//	}
-//	#endregion
 
 	#region NewCon
 	void NewCon(){
@@ -227,32 +171,16 @@ public class MainMenu : MonoBehaviour {
 	#endregion
 	#region Update
 	void Update(){
-//		if (Input.GetMouseButtonDown (0) && GameMode && !ActivMenu && !LoadMenu && !SaveMenu && !NewConMenu) {
-//			Debug.Log ("Im in Update" + " " + InventoryS);
-//			if(InventoryS){
-//				Debug.Log ("Im in Update if inventory");
-//				WorkWithInvetary();
-//			}
-//			if(Journal){
-//				Debug.Log ("Im in Update if journal");
-//				WorkWithJournal();
-//			}
-//			if(Settings){
-//				WorkWithSettings();
-//			}
-//		}
 		if(Input.GetKeyDown (KeyCode.I) && GameMode && !ActivMenu && !LoadMenu && !SaveMenu && !NewConMenu){
 			//WorkWithInvetary();
 		}
 		if(Input.GetKeyDown(KeyCode.Escape)){
 			if(!ActivMenu && !SaveMenu && !NewConMenu && !LoadMenu && GameMode){ 
-				//MainMenuTexture = (GameObject)Instantiate(Resources.Load("MainMenuPrefab"),new Vector3(-12,-20,0),Quaternion.identity);
 				ActivMenu = true;
 				Time.timeScale = 0;
 			}
 			else if(GameMode){
 					Time.timeScale = 1;
-					//Destroy(MainMenuTexture);
 					ActivMenu = false;	
 					LoadMenu = false;
 					SaveMenu = false;

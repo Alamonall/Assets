@@ -12,34 +12,33 @@ public class Battlefields : MonoBehaviour {
 	Object En2;
 	Object En3;
 	int i;
-	public int[,] Field;
+	static int[,] Field;
 	public int XField, YField; // размерность поля по вертикали ( XField) и горизонтали (YField)
-	public List<Charachters> Turn;
-	public int Enemys; //кол-во врагов на поле
-	public int Heroes; // кол-во героев на поле
-	public static GameObject WhoMakeStepNow; // Кто делает ход в данный момент
-	public static bool EndOfStep; // Если true - значит ход сделан
-	public int TempActionPoints; // Текущее кол-во экшн поинтов
-	public static bool frag; // Отвечает за уничтожение this.обьектов
+	public static List<Charachters> Turn;
+	public static int Enemys; //кол-во врагов на поле
+	public static int Heroes; // кол-во героев на поле
+	GameObject WhoMakeStepNow; // Кто делает ход в данный момент
+	bool EndOfStep; // Если true - значит ход сделан
+	public static int TempActionPoints; // Текущее кол-во экшн поинтов
+	public bool frag; // Отвечает за уничтожение this.обьектов
 	List<GameObject> ListOfPosCell;
 	public GUIStyle JournalMenuStyle;
 	public int x_chars; // координаты ГГ в момент хода
 	public int y_chars; // координаты ГГ в момент хода
-	public Charachters WhoStep; // кто ходит в данные момент, переменная для боев
+	public static Charachters WhoStep; // кто ходит в данные момент, переменная для боев
 	public int new_x;
 	public int new_y;
-	public bool Attack = false;
 	bool AIState = false; //при 1 запоминает ходы для ИИ
-	public int[] AIEnemyCoordsX = {14,14,14}; // координаты игроков для ИИ
-	public int[] AIEnemyCoordsY = {0,2,4}; // координаты игроков для ИИ
-	public int Temp;
+	int[] AIEnemyCoordsX = {14,14,14}; // координаты игроков для ИИ
+	int[] AIEnemyCoordsY = {0,2,4}; // координаты игроков для ИИ
+	int Temp;
 	int[,] AIField; // поле ддя расчетов ИИ
 	int[] Differences;
 	int WALL = -1; // непроходимая ячейка
 	int BLANK = -2; // свободная непомеченная ячейка
 	int HERO = 3; // ячейка, в которой находится герой
 	int ENEMY = 2;// ячейка, в которой находится враг
-	int EMPTY = 0; // свободная ячейка
+	static int EMPTY = 0; // свободная ячейка
 	int[] px, py; // координаты точек на пути
 	int len; //длина пути
 
@@ -137,51 +136,46 @@ public class Battlefields : MonoBehaviour {
 			//выбираем ближайшую точку и атакуем
 			if(AIField[AIEnemyCoordsX[Temp] - 1, AIEnemyCoordsY[Temp] - 1] == 1){
 				AIMakeTransition(AIEnemyCoordsX[Temp] - 1, AIEnemyCoordsY[Temp] - 1);
-				Attack = true;
+
 				//функция атаки
 			}
 			else if(AIField[AIEnemyCoordsX[Temp] + 1, AIEnemyCoordsY[Temp] + 1] == 1){
 				AIMakeTransition(AIEnemyCoordsX[Temp] + 1, AIEnemyCoordsY[Temp] + 1);
-				Attack = true;
 				//функция атаки
 			}
 			else if(AIField[AIEnemyCoordsX[Temp], AIEnemyCoordsY[Temp] - 1] == 1){
 				AIMakeTransition(AIEnemyCoordsX[Temp], AIEnemyCoordsY[Temp] - 1);
-				Attack = true;
 				//функция атаки
 			}
 			else if(AIField[AIEnemyCoordsX[Temp] + 1, AIEnemyCoordsY[Temp] - 1] == 1){
 				AIMakeTransition(AIEnemyCoordsX[Temp] + 1, AIEnemyCoordsY[Temp] - 1);
-				Attack = true;
 				//функция атаки
 			}
 			else if(AIField[AIEnemyCoordsX[Temp] + 1, AIEnemyCoordsY[Temp]] == 1){
 				AIMakeTransition(AIEnemyCoordsX[Temp] + 1, AIEnemyCoordsY[Temp]);
-				Attack = true;
 				//функция атаки
 			}
 			else if(AIField[AIEnemyCoordsX[Temp], AIEnemyCoordsY[Temp] + 1] == 1){
 				AIMakeTransition(AIEnemyCoordsX[Temp], AIEnemyCoordsY[Temp] + 1);
-				Attack = true;
 				//функция атаки
 			}
 			else if(AIField[AIEnemyCoordsX[Temp] - 1, AIEnemyCoordsY[Temp] + 1] == 1){
 				AIMakeTransition(AIEnemyCoordsX[Temp] - 1, AIEnemyCoordsY[Temp] + 1);
-				Attack = true;
 				//функция атаки
 			}
 			else if(AIField[AIEnemyCoordsX[Temp] - 1, AIEnemyCoordsY[Temp]] == 1){
 				AIMakeTransition(AIEnemyCoordsX[Temp] - 1, AIEnemyCoordsY[Temp]);
-				Attack = true;
 				//функция атаки
 
 			}
+			print ("Attack!");
 			Steps();
 		}
 		else //если враг не в пределах досягаемости смотрим как к нему придти
 		{
 			AIWaveAlgorithm(x_chars, y_chars, AIEnemyCoordsX[Temp], AIEnemyCoordsY[Temp]);
 			AIMakeTransition(px[WhoStep.ActionPoint],py[WhoStep.ActionPoint]);
+			Steps();
 		}
 	}
 	#endregion
@@ -197,7 +191,7 @@ public class Battlefields : MonoBehaviour {
 					if(AIField[q,w] == 1 || AIField[q,w] >= 0)
 						AIField[q,w] = BLANK;
 
-			PrintMy("Opps",AIField,15,5);
+			//PrintMy("Opps",AIField,15,5);
 			// распространение волны
 			d = 0;         // стартовая ячейка помечена 0
 			AIField[ax,ay] = 0;
@@ -242,11 +236,11 @@ public class Battlefields : MonoBehaviour {
 			}
 			px[0] = ax;
 			py[0] = ay;                    // теперь px[0..len] и py[0..len] - координаты ячеек пути
-			PrintMy("End",AIField,15,5);
+			//PrintMy("End",AIField,15,5);
 	}
 
 
-	public void KillCell(int i, int j){
+	public static void KillCell(int i, int j){
 		Field[i,j] = EMPTY;
 	}
 
@@ -282,16 +276,6 @@ public class Battlefields : MonoBehaviour {
 		AIField[new_x, new_y] = WALL;
 		WhoMakeStepNow.transform.position = new Vector3(x*15, y*15);
 		Steps();
-	}
-
-	//функция удаления персонажа из очереди при его убийстве
-	public void KillChar(string byKill)
-	{
-		for(int i = 0; i < Turn.Count; i++){
-			if(Turn[i].Type == byKill){
-				Turn.RemoveAt(i);
-			}
-		}
 	}
 
 	//Отрисовка персонажей

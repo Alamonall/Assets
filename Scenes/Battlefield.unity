@@ -84,7 +84,6 @@ GameObject:
   - 4: {fileID: 1064929774}
   - 20: {fileID: 1064929773}
   - 124: {fileID: 1064929771}
-  - 81: {fileID: 1064929770}
   - 114: {fileID: 1064929775}
   m_Layer: 0
   m_Name: Main Camera
@@ -93,13 +92,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!81 &1064929770
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1064929769}
-  m_Enabled: 1
 --- !u!124 &1064929771
 Behaviour:
   m_ObjectHideFlags: 0
@@ -160,9 +152,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   XField: 0
   YField: 0
-  Enemys: 0
-  Heroes: 0
-  TempActionPoints: 0
+  WhoMakeStepNow: {fileID: 0}
+  EndOfStep: 0
+  frag: 0
   JournalMenuStyle:
     m_Name: 
     m_Normal:
@@ -226,3 +218,6 @@ MonoBehaviour:
   y_chars: 0
   new_x: 0
   new_y: 0
+  AIEnemyCoordsX: 0e0000000e0000000e000000
+  AIEnemyCoordsY: 000000000200000004000000
+  Temp: 0

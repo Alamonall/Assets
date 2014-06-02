@@ -1316,7 +1316,7 @@ GameObject:
   - 60: {fileID: 78787415}
   m_Layer: 0
   m_Name: Sand
-  m_TagString: Background
+  m_TagString: Terrain
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1516,7 +1516,7 @@ GameObject:
   - 60: {fileID: 107751859}
   m_Layer: 0
   m_Name: Sand
-  m_TagString: Background
+  m_TagString: Terrain
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2216,7 +2216,7 @@ GameObject:
   - 60: {fileID: 179904274}
   m_Layer: 0
   m_Name: Sand
-  m_TagString: Background
+  m_TagString: Terrain
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4007,7 +4007,7 @@ GameObject:
   - 60: {fileID: 366080398}
   m_Layer: 0
   m_Name: Sand
-  m_TagString: Background
+  m_TagString: Terrain
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4435,7 +4435,7 @@ GameObject:
   - 60: {fileID: 411448763}
   m_Layer: 0
   m_Name: Sand
-  m_TagString: Background
+  m_TagString: Terrain
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4611,7 +4611,7 @@ GameObject:
   - 60: {fileID: 419749482}
   m_Layer: 0
   m_Name: Sand
-  m_TagString: Background
+  m_TagString: Terrain
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -5667,7 +5667,7 @@ GameObject:
   - 60: {fileID: 514396196}
   m_Layer: 0
   m_Name: Sand
-  m_TagString: Background
+  m_TagString: Terrain
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -5990,7 +5990,7 @@ GameObject:
   - 60: {fileID: 543076472}
   m_Layer: 0
   m_Name: Sand
-  m_TagString: Background
+  m_TagString: Terrain
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -6474,7 +6474,7 @@ GameObject:
   - 60: {fileID: 579766956}
   m_Layer: 0
   m_Name: Sand
-  m_TagString: Background
+  m_TagString: Terrain
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -7822,7 +7822,7 @@ GameObject:
   - 60: {fileID: 739556313}
   m_Layer: 0
   m_Name: Sand
-  m_TagString: Background
+  m_TagString: Terrain
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -8949,7 +8949,7 @@ GameObject:
   - 60: {fileID: 825078717}
   m_Layer: 0
   m_Name: Sand
-  m_TagString: Background
+  m_TagString: Terrain
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -9365,7 +9365,7 @@ GameObject:
   - 60: {fileID: 861073041}
   m_Layer: 0
   m_Name: Sand
-  m_TagString: Background
+  m_TagString: Terrain
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -10105,7 +10105,7 @@ GameObject:
   - 60: {fileID: 925824977}
   m_Layer: 0
   m_Name: Sand
-  m_TagString: Background
+  m_TagString: Terrain
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -10665,7 +10665,7 @@ GameObject:
   - 60: {fileID: 982990752}
   m_Layer: 0
   m_Name: Sand
-  m_TagString: Background
+  m_TagString: Terrain
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -10953,7 +10953,7 @@ GameObject:
   - 60: {fileID: 1011586003}
   m_Layer: 0
   m_Name: Sand
-  m_TagString: Background
+  m_TagString: Terrain
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -13031,7 +13031,7 @@ GameObject:
   - 60: {fileID: 1209155384}
   m_Layer: 0
   m_Name: Sand
-  m_TagString: Background
+  m_TagString: Terrain
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -13451,7 +13451,7 @@ GameObject:
   - 60: {fileID: 1238478978}
   m_Layer: 0
   m_Name: Sand
-  m_TagString: Background
+  m_TagString: Terrain
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -13971,7 +13971,7 @@ GameObject:
   - 60: {fileID: 1267628532}
   m_Layer: 0
   m_Name: Sand
-  m_TagString: Background
+  m_TagString: Terrain
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -16098,7 +16098,7 @@ SpriteRenderer:
   m_SortingLayer: 3
   m_SortingOrder: 0
   m_SortingLayerID: 2511236001
-  m_Sprite: {fileID: 21300000, guid: ae596d34dff7d614eb2f1530596bacf6, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 00574e8eabb60a94989462e84ce6f57f, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
 --- !u!114 &1403449267
 MonoBehaviour:
@@ -16124,7 +16124,7 @@ Transform:
   m_GameObject: {fileID: 1403449265}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -12.0258675, y: -13.3107824, z: 1}
-  m_LocalScale: {x: 22.7099991, y: 20.1000004, z: 1}
+  m_LocalScale: {x: 5, y: 5, z: 1}
   m_Children:
   - {fileID: 1320110377}
   m_Father: {fileID: 0}
@@ -16992,7 +16992,7 @@ GameObject:
   - 60: {fileID: 1476114086}
   m_Layer: 0
   m_Name: Sand
-  m_TagString: Background
+  m_TagString: Terrain
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -17384,7 +17384,7 @@ GameObject:
   - 60: {fileID: 1498688239}
   m_Layer: 0
   m_Name: Sand
-  m_TagString: Background
+  m_TagString: Terrain
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -17496,7 +17496,7 @@ GameObject:
   - 60: {fileID: 1506092066}
   m_Layer: 0
   m_Name: Sand
-  m_TagString: Background
+  m_TagString: Terrain
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -17904,7 +17904,7 @@ GameObject:
   - 60: {fileID: 1539347573}
   m_Layer: 0
   m_Name: Sand
-  m_TagString: Background
+  m_TagString: Terrain
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -18060,7 +18060,7 @@ GameObject:
   - 60: {fileID: 1550586479}
   m_Layer: 0
   m_Name: Sand
-  m_TagString: Background
+  m_TagString: Terrain
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -18422,7 +18422,7 @@ GameObject:
   - 60: {fileID: 1585279659}
   m_Layer: 0
   m_Name: Sand
-  m_TagString: Background
+  m_TagString: Terrain
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -18726,7 +18726,7 @@ GameObject:
   - 60: {fileID: 1597315609}
   m_Layer: 0
   m_Name: Sand
-  m_TagString: Background
+  m_TagString: Terrain
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -19648,7 +19648,7 @@ GameObject:
   - 60: {fileID: 1674490696}
   m_Layer: 0
   m_Name: Sand
-  m_TagString: Background
+  m_TagString: Terrain
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -19796,7 +19796,7 @@ GameObject:
   - 60: {fileID: 1693952660}
   m_Layer: 0
   m_Name: Sand
-  m_TagString: Background
+  m_TagString: Terrain
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -20156,7 +20156,7 @@ GameObject:
   - 60: {fileID: 1736643073}
   m_Layer: 0
   m_Name: Sand
-  m_TagString: Background
+  m_TagString: Terrain
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -21671,7 +21671,7 @@ GameObject:
   - 60: {fileID: 1899078639}
   m_Layer: 0
   m_Name: Sand
-  m_TagString: Background
+  m_TagString: Terrain
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -21739,7 +21739,7 @@ GameObject:
   - 60: {fileID: 1901728969}
   m_Layer: 0
   m_Name: Sand
-  m_TagString: Background
+  m_TagString: Terrain
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -22189,7 +22189,7 @@ GameObject:
   - 60: {fileID: 2037357566}
   m_Layer: 0
   m_Name: Sand
-  m_TagString: Background
+  m_TagString: Terrain
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -22484,7 +22484,7 @@ GameObject:
   - 60: {fileID: 2071293428}
   m_Layer: 0
   m_Name: Sand
-  m_TagString: Background
+  m_TagString: Terrain
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

@@ -437,7 +437,7 @@ State:
   m_Speed: 1
   m_CycleOffset: 0
   m_Motions:
-  - {fileID: 7400000, guid: a4d19ace3ed0d374ebbccaf419e9bda8, type: 2}
+  - {fileID: 7400000, guid: 8d9265018890fc246b6846af1ac8f786, type: 2}
   m_ParentStateMachine: {fileID: 110700000}
   m_Position: {x: -120, y: 36, z: 0}
   m_IKOnFeet: 0
@@ -452,7 +452,7 @@ State:
   m_Speed: 1
   m_CycleOffset: 0
   m_Motions:
-  - {fileID: 7400000, guid: 11d6bbeb8a99e3748be00584fafed154, type: 2}
+  - {fileID: 7400000, guid: 9e1939905215d614884a1c90cf11b4ae, type: 2}
   m_ParentStateMachine: {fileID: 110700000}
   m_Position: {x: 0, y: 276, z: 0}
   m_IKOnFeet: 0
@@ -467,7 +467,7 @@ State:
   m_Speed: 1
   m_CycleOffset: 0
   m_Motions:
-  - {fileID: 7400000, guid: 57158f11d47637d4e9a9283a581029f8, type: 2}
+  - {fileID: 7400000, guid: 3a2411d6e7c079c4a81105448b52a26c, type: 2}
   m_ParentStateMachine: {fileID: 110700000}
   m_Position: {x: 156, y: -48, z: 0}
   m_IKOnFeet: 0
@@ -482,7 +482,7 @@ State:
   m_Speed: 1
   m_CycleOffset: 0
   m_Motions:
-  - {fileID: 7400000, guid: bad3fdad76e9e554094c8a11ae079f3d, type: 2}
+  - {fileID: 7400000, guid: 0c732850496efba4d898c9780ef8a1d1, type: 2}
   m_ParentStateMachine: {fileID: 110700000}
   m_Position: {x: 384, y: 276, z: 0}
   m_IKOnFeet: 0
@@ -497,7 +497,7 @@ State:
   m_Speed: 1
   m_CycleOffset: 0
   m_Motions:
-  - {fileID: 7400000, guid: b52d4de1da47e6540964efbd8cf180a8, type: 2}
+  - {fileID: 7400000, guid: e8e345230544bd34dbcb4f4302201e78, type: 2}
   m_ParentStateMachine: {fileID: 110700000}
   m_Position: {x: 408, y: 36, z: 0}
   m_IKOnFeet: 0

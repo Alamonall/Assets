@@ -2,20 +2,17 @@ using UnityEngine;
 using System.Collections;
 
 public class GlobalPlayer : MonoBehaviour {
-	private Animator anim;
-	private Camera Camera;
-	private Transform Player;
+	Transform Player;
 	public int Speed = 5; // скорость хождения
 	public int Ran = 0;
-	private float CurX = -8; // Стартовые координаты ГГ
-	private float CurY = -13; // Стартовые координаты ГГ
-	private float CurZ = 1; // Стартовые координаты ГГ
-	private string Profile = "Prof1"; //Какой профиль загружен
+	float CurX = -8; // Стартовые координаты ГГ
+	float CurY = -13; // Стартовые координаты ГГ
+	float CurZ = 1; // Стартовые координаты ГГ
+	string Profile = "Prof1"; //Какой профиль загружен
 	public static bool Battle = false; 
 	public string TypeOfLocation; // Отвечат за то, на каком типе территории находится ГГ
 	public bool DangerZone = false; // Опасная ли зона, на которой счас ГГ
 	public float Times = 1;
-
 	void OnTriggerEnter2D(Collider2D other) {
 		if (!(other.gameObject.name == "GlobalPlayer")) {
 			TypeOfLocation = other.gameObject.name;
@@ -27,7 +24,6 @@ public class GlobalPlayer : MonoBehaviour {
 	}
 
 	void Start(){
-			anim = GetComponent<Animator>();
 			Player = this.gameObject.transform;
 	}
 
@@ -78,26 +74,16 @@ public class GlobalPlayer : MonoBehaviour {
 		}
 
 		if (Input.GetKey (KeyCode.W) || Input.GetKey(KeyCode.UpArrow)) {
-			anim.SetBool ("MoveUp", true);
 			Player.Translate (Vector3.up * Speed * Time.deltaTime);
 		}
-		else anim.SetBool ("MoveUp", false);
 		if (Input.GetKey (KeyCode.D) || Input.GetKey(KeyCode.RightArrow)) {
-			anim.SetBool ("MoveRight", true);
 			Player.Translate (Vector3.right * Speed * Time.deltaTime);
 		}
-		else anim.SetBool ("MoveRight", false);
 		if (Input.GetKey (KeyCode.A) || Input.GetKey(KeyCode.LeftArrow)) {
-			anim.SetBool ("MoveLeft", true);
 			Player.Translate(Vector3.left * Speed * Time.deltaTime);
 		}
-		else anim.SetBool ("MoveLeft", false);
 		if (Input.GetKey (KeyCode.S) || Input.GetKey(KeyCode.DownArrow)) {
-			anim.SetBool ("MoveDown", true);
 			Player.Translate (Vector3.down * Speed * Time.deltaTime);
 		}
-		else anim.SetBool ("MoveDown", false);
-		if (!Input.anyKey) anim.SetBool ("NotMove", true);
-		else anim.SetBool ("NotMove", false);
-		}
+	}
 }

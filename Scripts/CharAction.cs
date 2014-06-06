@@ -16,6 +16,8 @@ public class CharAction : MonoBehaviour {
 		ThisChar = this.gameObject.transform;
 	}
 
+
+
 	void OnMouseEnter(){
 		if(GameObject.Find(WhoStep.Type).tag != ThisTag){
 			renderer.material.color = Color.red;
@@ -23,6 +25,7 @@ public class CharAction : MonoBehaviour {
 			CutMove();
 		}
 	}
+
 
 	//Функция, которая проверяет есть ли враг поблизости 
 	void CutMove(){
@@ -54,6 +57,7 @@ public class CharAction : MonoBehaviour {
 		renderer.material.color = Color.white;
 		CanAttack = 0;
 	}
+
 	public void Defend(float x, float y){
 		Debug.Log("Im Defend!");
 		if(x == ThisChar.position.x/15 && y == ThisChar.position.y/15){
@@ -61,7 +65,7 @@ public class CharAction : MonoBehaviour {
 		}
 	}
 
-	void Kill(){
+	public void Kill(){
 		for(int i = 0; i < Turn.Count; i++){
 			if(Turn[i].Type == this.gameObject.name){
 				Turn.RemoveAt(i);

@@ -13,6 +13,7 @@ public class GlobalPlayer : MonoBehaviour {
 	public string TypeOfLocation; // Отвечат за то, на каком типе территории находится ГГ
 	public bool DangerZone = false; // Опасная ли зона, на которой счас ГГ
 	public float Times = 1;
+
 	void OnTriggerEnter2D(Collider2D other) {
 		if (!(other.gameObject.name == "GlobalPlayer")) {
 			TypeOfLocation = other.gameObject.name;
@@ -47,11 +48,8 @@ public class GlobalPlayer : MonoBehaviour {
 							if (Times == 0) {
 									Ran = (Random.Range (0, 1000));
 									Times = 1;
-									Debug.Log (Ran);
-									if (Ran > 650 && !Battle) { 
-											Debug.Log ("BATTLE!" + Ran);
+									if (Ran > 650 && !Battle)
 											MeetTheEnemy ();
-									}
 							}
 						}
 					    while(Times == 1 && DangerZone);
@@ -74,6 +72,8 @@ public class GlobalPlayer : MonoBehaviour {
 		}
 
 		if (Input.GetKey (KeyCode.W) || Input.GetKey(KeyCode.UpArrow)) {
+			Debug.Log("VectorUp = " + Vector3.up);
+			Debug.Log("deltaTime = " + Time.deltaTime);
 			Player.Translate (Vector3.up * Speed * Time.deltaTime);
 		}
 		if (Input.GetKey (KeyCode.D) || Input.GetKey(KeyCode.RightArrow)) {

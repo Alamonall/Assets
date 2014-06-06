@@ -2,37 +2,59 @@
 using System.Collections;
 
 public class MainMenu : MonoBehaviour {
-	bool GameMode = true; 
-	bool ActivMenu = false;
-	bool LoadMenu = false; 
-	bool SaveMenu = false; 
-	bool NewConMenu = false; 
-	bool InventoryMenu = false; 
-	bool JournalMenu = false; 
-	bool SettingsMenu = false; 
-	public GUIStyle ButtonMenuStyle;
+	public bool GameMode; // Включен ли игровой режим
+	public bool ActivMenu; //Активно ли главное меню
+	public bool LoadMenu; // Активно ли меню загрузки
+	public bool SaveMenu; // Активно ли меню сохранения
+	public bool NewConMenu;  // Активно ли меню Новой игры/Продолжить
+	public bool InventoryMenu;  // Активно ли меню инвентаря
+	public bool JournalMenu;  // Активно ли меню журнала
+	public bool SettingsMenu;  // Активно ли меню настроек
+	public GUIStyle ButtonMenuStyle; 
 	public GUIStyle BackgroundMenuStyle;
 	public GUIStyle InventoryMenuStyle;
 	public GUIStyle BackgroundInvJurMenuStyle;
 	public GUIStyle JournalMenuStyle;
 
+	void Start(){
+		if(Application.loadedLevelName == "GlobalWorld" || Application.loadedLevelName == "Battlefield"){
+			GameMode = true;
+			ActivMenu = false;
+			LoadMenu = false;
+			SaveMenu = false;
+			NewConMenu = false;  
+			InventoryMenu = false;  
+			JournalMenu = false;  
+			SettingsMenu = false;
+		}
+		else{
+			GameMode = false;
+			ActivMenu = true;
+			LoadMenu = false;
+			SaveMenu = false;
+			NewConMenu = false;  
+			InventoryMenu = false;  
+			JournalMenu = false;  
+			SettingsMenu = false;
+		}
+
+	}
+
 	void OnGUI () {
-		if (ActivMenu || SettingsMenu)
-						main_menu ();
-		if (LoadMenu) 
-						load_menu ();
-		if (SaveMenu)
-						save_menu ();
-		if (NewConMenu)
-						NewCon();
-		if (InventoryMenu) {
-						ShowInventory ();
-						Debug.Log("ShowInve");
-				}
-		if (JournalMenu)
-						ShowJournal ();
-		if (GameMode)
-						ShowMenu ();
+		if (ActivMenu || SettingsMenu){
+			main_menu ();}
+		if (LoadMenu) {
+			load_menu ();}
+		if (SaveMenu){
+			save_menu ();}
+		if (NewConMenu){
+			NewCon();}
+		if (InventoryMenu){
+			ShowInventory ();}
+		if (JournalMenu){
+			ShowJournal ();}
+		if (GameMode){
+			ShowMenu ();}
 	}
 
 	void ShowMenu(){
@@ -65,7 +87,7 @@ public class MainMenu : MonoBehaviour {
 				Time.timeScale = 1;
 		}
 		GUI.EndGroup ();
-		}
+	}
 
 	void ShowJournal(){
 		GameMode = false;
@@ -79,7 +101,7 @@ public class MainMenu : MonoBehaviour {
 		}
 		
 		GUI.EndGroup ();
-		}
+	}
 
 	#region MainMenu
 	void main_menu(){
@@ -111,11 +133,11 @@ public class MainMenu : MonoBehaviour {
 				LoadMenu = true;
 			}
 			if(GUI.Button (new Rect (Screen.width / 100 - 3, Screen.height / 20 + 306, 253, 100), "Exit",ButtonMenuStyle)){
-				GameMode = false;
+				Application.LoadLevel("FirstMenu");
 			}
 		}					
 			GUI.EndGroup ();
-		}
+	}
 	#endregion
 	#region LoadMeny
 	void load_menu(){
@@ -135,22 +157,23 @@ public class MainMenu : MonoBehaviour {
 	void NewCon(){
 		if (GameMode) {
 			ActivMenu = false;
-			Debug.Log ("Вышли из мегю");
+			Debug.Log ("Вышли из меню");
 		}
 		else {
 			GUI.BeginGroup (new Rect (Screen.width / 100, Screen.height / 20, 256, 450), BackgroundMenuStyle);
 			if(GUI.Button (new Rect (Screen.width / 100 - 3, Screen.height / 20, 253, 100), "New Game 1",ButtonMenuStyle)){
 				Application.LoadLevel("GlobalWorld");
+
 			}
 			if(GUI.Button (new Rect (Screen.width / 100 - 3, Screen.height / 20 + 102, 253, 100), "New Game 2",ButtonMenuStyle)){
 				Application.LoadLevel("GlobalWorld");
+
 			}
 			if(GUI.Button (new Rect (Screen.width / 100 - 3, Screen.height / 20 + 204, 253, 100), "New Game 3",ButtonMenuStyle)){
 				Application.LoadLevel("GlobalWorld");
+
 			}
 			if (GUI.Button (new Rect (Screen.width / 100 - 3, Screen.height / 20 + 306, 253, 100), "Back",ButtonMenuStyle)) {
-				NewConMenu = false;
-				ActivMenu = true;
 			}
 			GUI.EndGroup ();
 		}

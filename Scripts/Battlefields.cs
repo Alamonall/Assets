@@ -26,8 +26,8 @@ public class Battlefields : MonoBehaviour {
 	public int x_chars; // координаты ГГ в момент хода
 	public int y_chars; // координаты ГГ в момент хода
 	public static Charachters WhoStep; // кто ходит в данные момент, переменная для боев
-	public int new_x;
-	public int new_y;
+	public int new_x, new_y;
+	public static Charachters Defending;
 	bool AIState = false; //при 1 запоминает ходы для ИИ
 	int[] AIEnemyCoordsX = {14,14,14}; // координаты игроков для ИИ
 	int[] AIEnemyCoordsY = {0,2,4}; // координаты игроков для ИИ
@@ -94,8 +94,6 @@ public class Battlefields : MonoBehaviour {
 				}
 				else
 				{
-//					PrintMy("AIECX ", AIEnemyCoordsX);
-//					PrintMy("AIECY ",AIEnemyCoordsY);
 					AIState = true;
 					move(x_chars, y_chars, Turn[i].ActionPoint);
 					AIState = false;
@@ -129,6 +127,7 @@ public class Battlefields : MonoBehaviour {
 			else 
 				Temp = 2;
 		}
+		Defending = Turn[Temp];
 		print("X = " + AIEnemyCoordsX[Temp] + " Y =  " + AIEnemyCoordsY[Temp]);
 		if(AIField[AIEnemyCoordsX[Temp], AIEnemyCoordsY[Temp]] == 1) //проверка координатов ближайшего врага на то, есть ли он в пределах досягаемости
 		{
@@ -136,40 +135,44 @@ public class Battlefields : MonoBehaviour {
 			//выбираем ближайшую точку и атакуем
 			if(AIField[AIEnemyCoordsX[Temp] - 1, AIEnemyCoordsY[Temp] - 1] == 1){
 				AIMakeTransition(AIEnemyCoordsX[Temp] - 1, AIEnemyCoordsY[Temp] - 1);
-
+				GameObject.Find(Defending.Type).GetComponent<CharAction>().Kill();
 				//функция атаки
 			}
 			else if(AIField[AIEnemyCoordsX[Temp] + 1, AIEnemyCoordsY[Temp] + 1] == 1){
 				AIMakeTransition(AIEnemyCoordsX[Temp] + 1, AIEnemyCoordsY[Temp] + 1);
+				GameObject.Find(Defending.Type).GetComponent<CharAction>().Kill();
 				//функция атаки
 			}
 			else if(AIField[AIEnemyCoordsX[Temp], AIEnemyCoordsY[Temp] - 1] == 1){
 				AIMakeTransition(AIEnemyCoordsX[Temp], AIEnemyCoordsY[Temp] - 1);
+				GameObject.Find(Defending.Type).GetComponent<CharAction>().Kill();
 				//функция атаки
 			}
 			else if(AIField[AIEnemyCoordsX[Temp] + 1, AIEnemyCoordsY[Temp] - 1] == 1){
 				AIMakeTransition(AIEnemyCoordsX[Temp] + 1, AIEnemyCoordsY[Temp] - 1);
+				GameObject.Find(Defending.Type).GetComponent<CharAction>().Kill();
 				//функция атаки
 			}
 			else if(AIField[AIEnemyCoordsX[Temp] + 1, AIEnemyCoordsY[Temp]] == 1){
 				AIMakeTransition(AIEnemyCoordsX[Temp] + 1, AIEnemyCoordsY[Temp]);
+				GameObject.Find(Defending.Type).GetComponent<CharAction>().Kill();
 				//функция атаки
 			}
 			else if(AIField[AIEnemyCoordsX[Temp], AIEnemyCoordsY[Temp] + 1] == 1){
 				AIMakeTransition(AIEnemyCoordsX[Temp], AIEnemyCoordsY[Temp] + 1);
+				GameObject.Find(Defending.Type).GetComponent<CharAction>().Kill();
 				//функция атаки
 			}
 			else if(AIField[AIEnemyCoordsX[Temp] - 1, AIEnemyCoordsY[Temp] + 1] == 1){
 				AIMakeTransition(AIEnemyCoordsX[Temp] - 1, AIEnemyCoordsY[Temp] + 1);
+				GameObject.Find(Defending.Type).GetComponent<CharAction>().Kill();
 				//функция атаки
 			}
 			else if(AIField[AIEnemyCoordsX[Temp] - 1, AIEnemyCoordsY[Temp]] == 1){
 				AIMakeTransition(AIEnemyCoordsX[Temp] - 1, AIEnemyCoordsY[Temp]);
+				GameObject.Find(Defending.Type).GetComponent<CharAction>().Kill();
 				//функция атаки
-
 			}
-			print ("Attack!");
-			Steps();
 		}
 		else //если враг не в пределах досягаемости смотрим как к нему придти
 		{

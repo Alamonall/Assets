@@ -166,15 +166,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2370ac4e071a5b34ba27fcdfc394630f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GameMode: 0
-  ActivMenu: 1
-  LoadMenu: 0
-  SaveMenu: 0
-  NewConMenu: 0
-  Pause: 0
-  InventoryMenu: 0
-  JournalMenu: 0
-  SettingsMenu: 0
   ButtonMenuStyle:
     m_Name: 
     m_Normal:

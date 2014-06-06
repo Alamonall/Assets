@@ -152,8 +152,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   XField: 0
   YField: 0
-  WhoMakeStepNow: {fileID: 0}
-  EndOfStep: 0
   frag: 0
   JournalMenuStyle:
     m_Name: 
@@ -218,6 +216,3 @@ MonoBehaviour:
   y_chars: 0
   new_x: 0
   new_y: 0
-  AIEnemyCoordsX: 0e0000000e0000000e000000
-  AIEnemyCoordsY: 000000000200000004000000
-  Temp: 0

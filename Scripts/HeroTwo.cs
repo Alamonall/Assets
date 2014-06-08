@@ -7,9 +7,10 @@ public class HeroTwo : Charachters{
 		MaxHealt = 100;
 		Mana = 100;
 		MaxMana = 100;
-		Name = "Лена (Lena)";
+		Name = "Michelangelo (HeroTwo)";
 		ActionPoint = 3;
 		Type = "HeroTwo(Clone)";
+		Death = false;
 	}
 
 }

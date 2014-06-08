@@ -7,8 +7,9 @@ public class EnemyThree : Charachters {
 		MaxHealt = 100;
 		Mana = 100;
 		MaxMana = 100;
-		Name = "Орк";
+		Name = "Ork (EnemyThree)";
 		ActionPoint = 3;
 		Type = "EnemyThree(Clone)";
+		Death = false;
 	}
 }

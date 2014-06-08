@@ -7,9 +7,10 @@ public class EnemyOne: Charachters {
 		MaxHealt = 100;
 		Mana = 100;
 		MaxMana = 100;
-		Name = "Гоблин";
+		Name = "Goblin (EnemyOne)";
 		ActionPoint = 3;
 		Type = "EnemyOne(Clone)";
+		Death = false;
 	}
 	
 }

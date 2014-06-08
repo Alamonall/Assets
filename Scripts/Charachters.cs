@@ -9,5 +9,5 @@ public class Charachters {
 	public string Name;
 	public int ActionPoint;
 	public string Type;
-
+	public bool Death;
 }

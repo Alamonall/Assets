@@ -8,8 +8,10 @@ public class CharAction : MonoBehaviour {
 	string ThisTag; // Тэг this обьекта
 	Charachters WhoStep;// Кто ходит в данный момент (переменная из Battlefields)
 	Transform ThisChar;
+	bool tuggle;
 
 	void Start(){
+		tuggle = true;
 		ThisTag = this.gameObject.tag;
 		Turn = Battlefields.Turn;
 		WhoStep = Battlefields.WhoStep;
@@ -20,7 +22,7 @@ public class CharAction : MonoBehaviour {
 
 	void OnMouseEnter(){
 		if(GameObject.Find(WhoStep.Type).tag != ThisTag){
-			renderer.material.color = Color.red;
+			renderer.material.color = Color.black;
 			CanAttack = 1;
 			CutMove();
 		}
@@ -29,27 +31,23 @@ public class CharAction : MonoBehaviour {
 
 	//Функция, которая проверяет есть ли враг поблизости 
 	void CutMove(){
-		float xAttack = GameObject.Find(WhoStep.Type).transform.position.x/15;
-		float yAttack = GameObject.Find(WhoStep.Type).transform.position.y/15;
+		float xAttack = Battlefields.AIEnemyCoordsX[Battlefields.i];
+		float yAttack = Battlefields.AIEnemyCoordsY[Battlefields.i];
 		float xDef = ThisChar.position.x/15;
 		float yDef = ThisChar.position.y/15;
-		//Debug.Log("Pos Attack x = " + xAttack + " y = " + yAttack);
-		//Debug.Log("Pos Def x = " + xDef + " y = " + yDef);
+		Debug.Log("xA = " + xAttack + "; yA = " + yAttack);
+		Debug.Log ("xD = " + xDef + "; yD = " + yDef);
 		if(xAttack + 1 == xDef && yAttack == yDef){
 			CanAttack +=1;
-			//Debug.Log("CanAttack 1");
 		}
 		if(xAttack == xDef && yAttack + 1 == yDef){
 			CanAttack +=1;
-			//Debug.Log("CanAttack 2");
 		}
 		if(xAttack - 1 == xDef && yAttack == yDef){
 			CanAttack +=1;
-			//Debug.Log("CanAttack 3");
 		}
 		if(xAttack == xDef && yAttack - 1 == yDef){
 			CanAttack +=1;
-			//Debug.Log("CanAttack 4");
 		}
 	}
 
@@ -66,26 +64,36 @@ public class CharAction : MonoBehaviour {
 	}
 
 	public void Kill(){
+		if(ThisTag == "Enemys")
+			Battlefields.Enemys--;
+		else if(ThisTag == "Charachters")
+			Battlefields.Heroes--;
 		for(int i = 0; i < Turn.Count; i++){
 			if(Turn[i].Type == this.gameObject.name){
-				Turn.RemoveAt(i);
+				Debug.Log(" I killed " + Turn[i]);
+				Turn[i].Death = true;
+				Battlefields.TempActionPoints = 0;
+				Destroy(this.gameObject);
 			}
 		}
-		Destroy(this.gameObject);
 	}
 
 	void Update () {
-		if(Input.GetMouseButton(0)){
+		if(Input.GetMouseButtonDown(0)){
 			if(CanAttack == 2){
-				Battlefields.TempActionPoints = 0;
-				if(ThisTag == "Enemys")
-					Battlefields.Enemys--;
-				else if(ThisTag == "Charachters")
-					Battlefields.Heroes--;
+				CanAttack = 0;
 				Battlefields.KillCell(Mathf.CeilToInt(ThisChar.position.x/15), Mathf.CeilToInt(ThisChar.position.y/15));
+				GameObject.Find("Main Camera").GetComponent<Battlefields>().MakeTransition(ThisChar.position.x,ThisChar.position.y);
 				Kill();
 
 			}
 		}
+		if (Input.GetKeyDown (KeyCode.K)) {
+						if (tuggle)
+								tuggle = false;
+						else if (!tuggle)
+								tuggle = true;
+						this.gameObject.renderer.enabled = tuggle;
+				}
 	}
 }

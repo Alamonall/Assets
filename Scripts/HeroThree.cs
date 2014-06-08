@@ -7,8 +7,9 @@ public class HeroThree : Charachters {
 		MaxHealt = 100;
 		Mana = 100;
 		MaxMana = 100;
-		Name = "Дима (Dima)";
+		Name = "Rafael (HeroThree)";
 		ActionPoint = 4;
 		Type = "HeroThree(Clone)";
+		Death = false;
 	}
 }

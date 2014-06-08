@@ -7,8 +7,9 @@ public class EnemyTwo : Charachters {
 		MaxHealt = 100;
 		Mana = 100;
 		MaxMana = 100;
-		Name = "Варг";
+		Name = "Wolf (EnemyTwo)";
 		ActionPoint = 3;
 		Type = "EnemyTwo(Clone)";
+		Death = false;
 	}
 }

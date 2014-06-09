@@ -30,8 +30,8 @@ public class Battlefields : MonoBehaviour {
 	public static Charachters WhoStep; // кто ходит в данные момент, переменная для боев
 	public int new_x, new_y;
 	public static Charachters Defending;
-	public static int[] AIEnemyCoordsX = {14,14,14}; // координаты игроков для ИИ
-	public static int[] AIEnemyCoordsY = {0,2,4}; // координаты игроков для ИИ
+	public static int[] AIEnemyCoordsX = {29,29,29}; // координаты игроков для ИИ
+	public static int[] AIEnemyCoordsY = {1,5,9}; // координаты игроков для ИИ
 	int Temp;
 	int[,] AIField; // поле ддя расчетов ИИ
 	int[] Differences;
@@ -42,11 +42,12 @@ public class Battlefields : MonoBehaviour {
 	static int EMPTY = 0; // свободная ячейка
 	int[] px, py; // координаты точек на пути
 	int len; //длина пути
-
+	int StepsCount;
 	void Start(){
 		i = -1;
-		XField = 15;
-		YField = 5;
+		StepsCount = 0;
+		XField = 30;
+		YField = 10;
 		Enemys = 3;
 		Heroes = 3;
 		px = new int [XField*YField];
@@ -78,8 +79,10 @@ public class Battlefields : MonoBehaviour {
 	
 	public void Steps(){
 		i++;
-		if (i == 3)
-						info = "";
+		StepsCount++;
+		info += "\n Ход " + StepsCount + ". ";
+		if (StepsCount%10 == 0)
+						info = "\n";
 		ClearAllCells();
 		if(Heroes > 0 && Enemys > 0){
 				int h = Enemys + Heroes;
@@ -101,7 +104,7 @@ public class Battlefields : MonoBehaviour {
 					}
 					else
 					{
-						for(int j = 0; j < 3; j++){ 
+						for(int j = 0; j < Heroes; j++){ 
 							Differences[j] = (Mathf.Abs(AIEnemyCoordsX[j] - x_chars) + Mathf.Abs(AIEnemyCoordsY[j] - y_chars));
 						}
 						AIStep();
@@ -116,22 +119,28 @@ public class Battlefields : MonoBehaviour {
 
 	#region AI
 	void AIStep(){
-		Temp = 0;
-		if(Differences[0] <= Differences[1])
-		{
-			if(Differences[0] <= Differences[2])
+				Temp = 0;
+		if (Heroes == 3) {
+						if (Differences [0] <= Differences [1]) {
+								if (Differences [0] <= Differences [2])
+										Temp = 0;
+								else
+										Temp = 2;
+						} else {
+								if (Differences [1] <= Differences [2])
+										Temp = 1;
+								else 
+										Temp = 2;
+						}
+		}
+		else if (Heroes == 2) {
+			if(Differences[0] <= Differences[1])			
 				Temp = 0;
 			else
-				Temp = 2;
-		}
-		
-		else
-		{
-			if(Differences[1] <= Differences[2])
 				Temp = 1;
-			else 
-				Temp = 2;
 		}
+		else if(Heroes == 1)
+			Temp = 0;
 		Defending = Turn[Temp];
 		AIWaveAlgorithm(x_chars, y_chars, AIEnemyCoordsX[Temp], AIEnemyCoordsY[Temp]);
 		bool close = true;
@@ -139,16 +148,16 @@ public class Battlefields : MonoBehaviour {
 			close = false;
 			for (int i = 0; i < WhoStep.ActionPoint; i++){
 				if (AIEnemyCoordsX [Temp] == px [i] && AIEnemyCoordsY [Temp] == py [i])
-					if (!Defending.Death) {
+					if (Defending != null && !Defending.Death) {
 						close = true;
 						TempActionPoints = 0;
 						GameObject.Find (Defending.Type).GetComponent<CharAction> ().Kill ();
 						Debug.Log(Defending.Type + " was killed");
-						info += Defending.Type + " was killed" + "\n";
+						info += Defending.Type + " was killed";
 						AIMakeTransition (px [WhoStep.ActionPoint - 1], py [WhoStep.ActionPoint]);
-						AIField [AIEnemyCoordsX [Temp], AIEnemyCoordsY [Temp]] = BLANK;
 						Field [AIEnemyCoordsX [Temp], AIEnemyCoordsY [Temp]] = EMPTY;
 						Defending = null;
+						break;
 					}
 			}
 		}
@@ -259,34 +268,34 @@ public class Battlefields : MonoBehaviour {
 		for(int i = 0; i < XField; i++){
 			for(int j = 0; j < YField; j++){
 				if(i == 0){
-					if(j == 0){
+					if(j == YField/YField){
 						Instantiate(En1, new Vector3(i * 15, j * 15, -10),Quaternion.identity);
 						Field[i,j] = ENEMY;
 						AIField[i,j] = WALL;
 					}
-					if(j == 2){
+					if(j == YField/3){
 						Instantiate(En2, new Vector3(i * 15, j * 15, -10),Quaternion.identity);
 						Field[i,j] = ENEMY;
 						AIField[i,j] = WALL;
 					}
-					if(j == 4){
+					if(j == YField/2){
 						Instantiate(En3, new Vector3(i * 15, j * 15, -10),Quaternion.identity);
 						Field[i,j] = ENEMY;
 						AIField[i,j] = WALL;
 					}
 				}
-				if(i == 14){
-					if(j == 0){
+				if(i == XField - 1){
+					if(j == YField/YField){
 						Instantiate(WarriorTexture, new Vector3( i * 15, j * 15, -10),Quaternion.identity);
 						Field[i,j] = HERO;
 						AIField[i,j] = WALL;
 					}
-					if(j == 2){
+					if(j == YField/3){
 						Instantiate(ArcherTexture, new Vector3(i * 15 , j * 15, -10),Quaternion.identity);
 						Field[i,j] = HERO;	
 						AIField[i,j] = WALL;
 					}
-					if(j == 4){
+					if(j == YField/2){
 						Instantiate(MageTexture, new Vector3(i * 15 , j * 15, -10),Quaternion.identity);
 						Field[i,j] = HERO;
 						AIField[i,j] = WALL;

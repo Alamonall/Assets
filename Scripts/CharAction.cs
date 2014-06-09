@@ -21,11 +21,12 @@ public class CharAction : MonoBehaviour {
 
 
 	void OnMouseEnter(){
-		if(GameObject.Find(WhoStep.Type).tag != ThisTag){
-			renderer.material.color = Color.black;
-			CanAttack = 1;
-			CutMove();
-		}
+		if(GameObject.Find(WhoStep.Type) != null)
+			if(GameObject.Find(WhoStep.Type).tag != ThisTag){
+				renderer.material.color = Color.black;
+				CanAttack = 1;
+				CutMove();
+			}
 	}
 
 
